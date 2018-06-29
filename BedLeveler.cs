@@ -14,7 +14,14 @@ namespace BedLeveler
 		List<Vector3> points = new List<Vector3>();
 		List<Vector2> toMeasure = new List<Vector2>();
 
-		public BedLeveler() { InitializeComponent(); }
+		float? LowerBound = null;
+		float? UpperBound = null;
+
+		public BedLeveler()
+		{
+			InitializeComponent();
+			Text += $" {Application.ProductVersion}";
+		}
 
 		private void MeasurePoint(float x, float y)
 		{
@@ -133,13 +140,16 @@ namespace BedLeveler
 
 			float min = (from p in points select p.Z).Min();
 			float max = (from p in points select p.Z).Max();
+			if (LowerBound.HasValue) min = LowerBound.Value;
+			if (UpperBound.HasValue) max = UpperBound.Value;
+
 			float range = max - min;
 
 			using (Font font = new Font("Arial", 11.0f, FontStyle.Bold))
 			using (StringFormat format = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
 			foreach (var p in points)
 			{
-				float zPercent = range < 0.001 ? 1.0f : (p.Z - min) / range;
+				float zPercent = Math.Max(0.0f, Math.Min(1.0f, range < 0.001 ? 1.0f : (p.Z - min) / range));
 				float hue = Lerp(0, 240, zPercent);
 				Color c = ColorFromHSV(hue, 1.0, 1.0);
 
@@ -227,6 +237,30 @@ namespace BedLeveler
 		private void SetZto5(object sender, EventArgs e)
 		{
 			if (port != null) port.Send("G1 Z5 F6000");
+		}
+
+		private void SetBound(object sender, EventArgs e)
+		{
+			var tag = ((ToolStripMenuItem)sender).Tag as string;
+
+			float? current = null;
+			if (tag.StartsWith("L")) current = LowerBound;
+			else current = UpperBound;
+
+			string input = Microsoft.VisualBasic.Interaction.InputBox($"Choose a {tag} Bound for color selection.  Leave blank to reset to automatic bound.  This is for visualization only (to match against subsequent scans).", $"Set {tag} Color Bound", current?.ToString() ?? "");
+
+			if (string.IsNullOrWhiteSpace(input))
+			{
+				if (tag.StartsWith("L")) LowerBound = null;
+				else UpperBound = null;
+			}
+			else if (float.TryParse(input, out float value))
+			{
+				if (tag.StartsWith("L")) LowerBound = value;
+				else UpperBound = value;
+			}
+
+			bedPicture.Invalidate();
 		}
 	}
 }

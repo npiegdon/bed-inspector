@@ -34,19 +34,22 @@
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripSplitButton1 = new System.Windows.Forms.ToolStripSplitButton();
 			this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.setZ50ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.measureCornersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.x17PatternToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.x12PatternToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.x9PatternToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.x5PatternToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.setZ50ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.x3PatternToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.x5PatternToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.x9PatternToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.x12PatternToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.x17PatternToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.x19PatternToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.outputText = new System.Windows.Forms.TextBox();
 			this.disconnectButton = new System.Windows.Forms.Button();
 			this.bedPicture = new System.Windows.Forms.PictureBox();
-			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-			this.x19PatternToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+			this.setLowerBoundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.setUpperBoundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.bedPicture)).BeginInit();
 			this.SuspendLayout();
@@ -93,7 +96,10 @@
             this.x9PatternToolStripMenuItem,
             this.x12PatternToolStripMenuItem,
             this.x17PatternToolStripMenuItem,
-            this.x19PatternToolStripMenuItem});
+            this.x19PatternToolStripMenuItem,
+            this.toolStripMenuItem2,
+            this.setLowerBoundToolStripMenuItem,
+            this.setUpperBoundToolStripMenuItem});
 			this.toolStripSplitButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton1.Image")));
 			this.toolStripSplitButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripSplitButton1.Name = "toolStripSplitButton1";
@@ -107,13 +113,6 @@
 			this.clearToolStripMenuItem.Text = "Clear and Re-center";
 			this.clearToolStripMenuItem.Click += new System.EventHandler(this.ClearClicked);
 			// 
-			// setZ50ToolStripMenuItem
-			// 
-			this.setZ50ToolStripMenuItem.Name = "setZ50ToolStripMenuItem";
-			this.setZ50ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.setZ50ToolStripMenuItem.Text = "Set Z=5.0";
-			this.setZ50ToolStripMenuItem.Click += new System.EventHandler(this.SetZto5);
-			// 
 			// measureCornersToolStripMenuItem
 			// 
 			this.measureCornersToolStripMenuItem.Name = "measureCornersToolStripMenuItem";
@@ -121,29 +120,25 @@
 			this.measureCornersToolStripMenuItem.Text = "Measure corners";
 			this.measureCornersToolStripMenuItem.Click += new System.EventHandler(this.MeasureCorners);
 			// 
-			// x17PatternToolStripMenuItem
+			// setZ50ToolStripMenuItem
 			// 
-			this.x17PatternToolStripMenuItem.Name = "x17PatternToolStripMenuItem";
-			this.x17PatternToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.x17PatternToolStripMenuItem.Tag = "17";
-			this.x17PatternToolStripMenuItem.Text = "17x17 pattern";
-			this.x17PatternToolStripMenuItem.Click += new System.EventHandler(this.GeneratePattern);
+			this.setZ50ToolStripMenuItem.Name = "setZ50ToolStripMenuItem";
+			this.setZ50ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.setZ50ToolStripMenuItem.Text = "Set Z=5.0";
+			this.setZ50ToolStripMenuItem.Click += new System.EventHandler(this.SetZto5);
 			// 
-			// x12PatternToolStripMenuItem
+			// toolStripMenuItem1
 			// 
-			this.x12PatternToolStripMenuItem.Name = "x12PatternToolStripMenuItem";
-			this.x12PatternToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.x12PatternToolStripMenuItem.Tag = "11";
-			this.x12PatternToolStripMenuItem.Text = "11x11 pattern";
-			this.x12PatternToolStripMenuItem.Click += new System.EventHandler(this.GeneratePattern);
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
 			// 
-			// x9PatternToolStripMenuItem
+			// x3PatternToolStripMenuItem
 			// 
-			this.x9PatternToolStripMenuItem.Name = "x9PatternToolStripMenuItem";
-			this.x9PatternToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.x9PatternToolStripMenuItem.Tag = "7";
-			this.x9PatternToolStripMenuItem.Text = "7x7 pattern";
-			this.x9PatternToolStripMenuItem.Click += new System.EventHandler(this.GeneratePattern);
+			this.x3PatternToolStripMenuItem.Name = "x3PatternToolStripMenuItem";
+			this.x3PatternToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.x3PatternToolStripMenuItem.Tag = "3";
+			this.x3PatternToolStripMenuItem.Text = "3x3 pattern";
+			this.x3PatternToolStripMenuItem.Click += new System.EventHandler(this.GeneratePattern);
 			// 
 			// x5PatternToolStripMenuItem
 			// 
@@ -153,13 +148,37 @@
 			this.x5PatternToolStripMenuItem.Text = "5x5 pattern";
 			this.x5PatternToolStripMenuItem.Click += new System.EventHandler(this.GeneratePattern);
 			// 
-			// x3PatternToolStripMenuItem
+			// x9PatternToolStripMenuItem
 			// 
-			this.x3PatternToolStripMenuItem.Name = "x3PatternToolStripMenuItem";
-			this.x3PatternToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.x3PatternToolStripMenuItem.Tag = "3";
-			this.x3PatternToolStripMenuItem.Text = "3x3 pattern";
-			this.x3PatternToolStripMenuItem.Click += new System.EventHandler(this.GeneratePattern);
+			this.x9PatternToolStripMenuItem.Name = "x9PatternToolStripMenuItem";
+			this.x9PatternToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.x9PatternToolStripMenuItem.Tag = "7";
+			this.x9PatternToolStripMenuItem.Text = "7x7 pattern";
+			this.x9PatternToolStripMenuItem.Click += new System.EventHandler(this.GeneratePattern);
+			// 
+			// x12PatternToolStripMenuItem
+			// 
+			this.x12PatternToolStripMenuItem.Name = "x12PatternToolStripMenuItem";
+			this.x12PatternToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.x12PatternToolStripMenuItem.Tag = "11";
+			this.x12PatternToolStripMenuItem.Text = "11x11 pattern";
+			this.x12PatternToolStripMenuItem.Click += new System.EventHandler(this.GeneratePattern);
+			// 
+			// x17PatternToolStripMenuItem
+			// 
+			this.x17PatternToolStripMenuItem.Name = "x17PatternToolStripMenuItem";
+			this.x17PatternToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.x17PatternToolStripMenuItem.Tag = "17";
+			this.x17PatternToolStripMenuItem.Text = "17x17 pattern";
+			this.x17PatternToolStripMenuItem.Click += new System.EventHandler(this.GeneratePattern);
+			// 
+			// x19PatternToolStripMenuItem
+			// 
+			this.x19PatternToolStripMenuItem.Name = "x19PatternToolStripMenuItem";
+			this.x19PatternToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.x19PatternToolStripMenuItem.Tag = "19";
+			this.x19PatternToolStripMenuItem.Text = "19x19 pattern";
+			this.x19PatternToolStripMenuItem.Click += new System.EventHandler(this.GeneratePattern);
 			// 
 			// statusLabel
 			// 
@@ -202,18 +221,26 @@
 			this.bedPicture.Paint += new System.Windows.Forms.PaintEventHandler(this.BedPaint);
 			this.bedPicture.MouseClick += new System.Windows.Forms.MouseEventHandler(this.BedClick);
 			// 
-			// toolStripMenuItem1
+			// toolStripMenuItem2
 			// 
-			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
 			// 
-			// x19PatternToolStripMenuItem
+			// setLowerBoundToolStripMenuItem
 			// 
-			this.x19PatternToolStripMenuItem.Name = "x19PatternToolStripMenuItem";
-			this.x19PatternToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.x19PatternToolStripMenuItem.Tag = "19";
-			this.x19PatternToolStripMenuItem.Text = "19x19 pattern";
-			this.x19PatternToolStripMenuItem.Click += new System.EventHandler(this.GeneratePattern);
+			this.setLowerBoundToolStripMenuItem.Name = "setLowerBoundToolStripMenuItem";
+			this.setLowerBoundToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.setLowerBoundToolStripMenuItem.Tag = "Lower";
+			this.setLowerBoundToolStripMenuItem.Text = "Set lower bound";
+			this.setLowerBoundToolStripMenuItem.Click += new System.EventHandler(this.SetBound);
+			// 
+			// setUpperBoundToolStripMenuItem
+			// 
+			this.setUpperBoundToolStripMenuItem.Name = "setUpperBoundToolStripMenuItem";
+			this.setUpperBoundToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.setUpperBoundToolStripMenuItem.Tag = "Upper";
+			this.setUpperBoundToolStripMenuItem.Text = "Set upper bound";
+			this.setUpperBoundToolStripMenuItem.Click += new System.EventHandler(this.SetBound);
 			// 
 			// BedLeveler
 			// 
@@ -258,5 +285,8 @@
 		private System.Windows.Forms.ToolStripMenuItem setZ50ToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem x19PatternToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+		private System.Windows.Forms.ToolStripMenuItem setLowerBoundToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem setUpperBoundToolStripMenuItem;
 	}
 }
