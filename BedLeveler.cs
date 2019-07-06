@@ -11,16 +11,47 @@ namespace BedLeveler
 	public partial class BedLeveler : Form
 	{
 		PrinterPort port;
-		List<Vector3> points = new List<Vector3>();
-		List<Vector2> toMeasure = new List<Vector2>();
-
-		float? LowerBound = null;
-		float? UpperBound = null;
+		readonly List<Vector3> points = new List<Vector3>();
+		readonly List<Vector2> toMeasure = new List<Vector2>();
 
 		public BedLeveler()
 		{
 			InitializeComponent();
 			Text += $" {Application.ProductVersion}";
+
+			// Give our best guess at a port name
+			portText.Text = System.IO.Ports.SerialPort.GetPortNames().FirstOrDefault() ?? "COM5";
+		}
+
+		(int, int) BedDimensions
+		{
+			get
+			{
+				return (int.TryParse(widthText.Text, out int width) ? width : 0,
+					int.TryParse(heightText.Text, out int height) ? height : 0);
+			}
+		}
+
+		(bool, int, int) CheckedDimensions
+		{
+			get
+			{
+				var (w, h) = BedDimensions;
+				if (w >= 10 && h >= 10) return (true, w, h);
+
+				MessageBox.Show("Double-check you've typed integers in the bed width and height boxes.", "Can't read bed dimensions", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return (false, 0, 0);
+			}
+		}
+
+
+		(float?, float?) ColorBounds
+		{
+			get
+			{
+				return (float.TryParse(minZText.Text, out float min) ? min : (float?)null,
+					float.TryParse(maxZText.Text, out float max) ? max : (float?)null);
+			}
 		}
 
 		private void MeasurePoint(float x, float y)
@@ -36,7 +67,8 @@ namespace BedLeveler
 			if (port == null) return;
 			if (toMeasure.Count == 0) return;
 
-			Vector2 current = new Vector2(75, 75);
+			var (w, h) = BedDimensions;
+			Vector2 current = new Vector2(w > 10 ? w / 2.0f : 75.0f, h > 10 ? h / 2.0f : 75.0f);
 			if (points.Count > 0) current = (from p in points select new Vector2(p.X, p.Y)).Last();
 
 			var next = (from p in toMeasure let distSq = (current.X - p.X) * (current.X - p.X) + (current.Y - p.Y) * (current.Y - p.Y) orderby distSq select p).First();
@@ -79,7 +111,6 @@ namespace BedLeveler
 			if (port == null) port = new PrinterPort(portText.Text, DataReceived);
 			connectButton.Enabled = false;
 			disconnectButton.Enabled = true;
-			statusLabel.Text = $"Connected to {portText.Text}";
 
 			ClearClicked(this, new EventArgs());
 		}
@@ -92,28 +123,14 @@ namespace BedLeveler
 
 			disconnectButton.Enabled = false;
 			connectButton.Enabled = true;
-			statusLabel.Text = "Not connected";
 		}
 
-		private const int Radius = 20;
-
-		private Vector2 ToPhysical(int x, int y)
-		{
-			float pX = Math.Max(0.0f, Math.Min(150.0f, 150.0f * (x-Radius) / (bedPicture.Width - 2*Radius)));
-			float pY = Math.Max(0.0f, Math.Min(150.0f, 150.0f * ((bedPicture.Height - y) - Radius) / (bedPicture.Height - 2*Radius)));
-			return new Vector2(pX, pY);
-		}
-		private Point FromPhysical(float x, float y)
-		{
-			return new Point((int)((bedPicture.Width - 2*Radius) * x / 150.0f) + Radius, (int)((bedPicture.Height - 2*Radius) * (150.0f - y) / 150.0f) + Radius);
-		}
-
-		public static Color ColorFromHSV(double hue, double saturation, double value)
+		static Color ColorFromHSV(double hue, double saturation, double value)
 		{
 			int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
 			double f = hue / 60 - Math.Floor(hue / 60);
 
-			value = value * 255;
+			value *= 255;
 			int v = Convert.ToInt32(value);
 			int p = Convert.ToInt32(value * (1 - saturation));
 			int q = Convert.ToInt32(value * (1 - f * saturation));
@@ -128,6 +145,7 @@ namespace BedLeveler
 		}
 
 		float Lerp(float a, float b, float by) { return a * by + b * (1 - by); }
+		const int Radius = 20;
 
 		private void BedPaint(object sender, PaintEventArgs e)
 		{
@@ -136,12 +154,24 @@ namespace BedLeveler
 			g.CompositingQuality = CompositingQuality.HighQuality;
 			g.SmoothingMode = SmoothingMode.HighQuality;
 
+			var (w, h) = BedDimensions;
+			if (w < 15 || h < 15)
+			{
+				using (Font font = new Font("Arial", 18.0f, FontStyle.Bold))
+				using (StringFormat format = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
+					g.DrawString("Enter valid bed width and height!", font, Brushes.Red, bedPicture.ClientRectangle, format);
+
+				return;
+			}
+
 			if (points.Count == 0) return;
 
 			float min = (from p in points select p.Z).Min();
 			float max = (from p in points select p.Z).Max();
-			if (LowerBound.HasValue) min = LowerBound.Value;
-			if (UpperBound.HasValue) max = UpperBound.Value;
+
+			var (lowerBound, upperBound) = ColorBounds;
+			if (lowerBound.HasValue) min = lowerBound.Value;
+			if (upperBound.HasValue) max = upperBound.Value;
 
 			float range = max - min;
 
@@ -153,8 +183,7 @@ namespace BedLeveler
 				float hue = Lerp(0, 240, zPercent);
 				Color c = ColorFromHSV(hue, 1.0, 1.0);
 
-				Point pt = FromPhysical(p.X, p.Y);
-				pt.Offset(-Radius, -Radius);
+				Point pt = new Point((int)((bedPicture.Width - 2 * Radius) * p.X / w), (int)((bedPicture.Height - 2 * Radius) * (h - p.Y) / h));
 
 				using (GraphicsPath path = new GraphicsPath())
 				{
@@ -175,8 +204,12 @@ namespace BedLeveler
 			// Clicking the bed interrupts patterns
 			toMeasure.Clear();
 
-			var physical = ToPhysical(e.X, e.Y);
-			MeasurePoint(physical.X, physical.Y);
+			var (valid, w, h) = CheckedDimensions;
+			if (!valid) return;
+
+			var pX = Math.Max(0.0f, Math.Min(w, w * (e.X - Radius) / (bedPicture.Width - 2 * Radius)));
+			var pY = Math.Max(0.0f, Math.Min(h, h * (bedPicture.Height - e.Y - Radius) / (bedPicture.Height - 2 * Radius)));
+			MeasurePoint(pX, pY);
 		}
 
 		private void ClearClicked(object sender, EventArgs e)
@@ -198,15 +231,18 @@ namespace BedLeveler
 		{
 			toMeasure.Clear();
 
-			var tag = ((ToolStripMenuItem)sender).Tag as string;
-			if (tag == null) return;
+			var (valid, w, h) = CheckedDimensions;
+			if (!valid) return;
 
-			int steps = int.Parse(tag);
-			float step = 150.0f / (steps - 1);
+			if (!int.TryParse(measureEveryText.Text, out int measureEvery))
+			{
+				MessageBox.Show("Double-check you've typed an integer into the \"measure every\" box.", "Can't read step", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
 
-			for (int i = 0; i < steps; ++i)
-				for (int j = 0; j < steps; ++j)
-					toMeasure.Add(new Vector2(i * step, j * step));
+			for (int i = 0; i <= w; i += measureEvery)
+				for (int j = 0; j <= h; j += measureEvery)
+					toMeasure.Add(new Vector2(i, j));
 
 			MeasureNextPoint();
 		}
@@ -225,12 +261,15 @@ namespace BedLeveler
 			// Clearing all measurements interrupts patterns
 			toMeasure.Clear();
 
+			var (valid, w, h) = CheckedDimensions;
+			if (!valid) return;
+
 			if (port != null)
 			{
-				port.Send("G1 Y150 X0 Z2 F6000"); port.Send("G30");
-				port.Send("G1 X0 Y0 Z2 F6000"); port.Send("G30");
-				port.Send("G1 Y0 X150 Z2 F6000"); port.Send("G30");
-				port.Send("G1 Y150 X150 Z2 F6000"); port.Send("G30");
+				port.Send($"G1 Y{h} X0 Z2 F6000"); port.Send("G30");
+				port.Send($"G1 X0 Y0 Z2 F6000"); port.Send("G30");
+				port.Send($"G1 Y0 X{w} Z2 F6000"); port.Send("G30");
+				port.Send($"G1 Y{h} X{w} Z2 F6000"); port.Send("G30");
 			}
 		}
 
@@ -239,27 +278,8 @@ namespace BedLeveler
 			if (port != null) port.Send("G1 Z5 F6000");
 		}
 
-		private void SetBound(object sender, EventArgs e)
+		private void RedrawBedImage(object sender, EventArgs e)
 		{
-			var tag = ((ToolStripMenuItem)sender).Tag as string;
-
-			float? current = null;
-			if (tag.StartsWith("L")) current = LowerBound;
-			else current = UpperBound;
-
-			string input = Microsoft.VisualBasic.Interaction.InputBox($"Choose a {tag} Bound for color selection.  Leave blank to reset to automatic bound.  This is for visualization only (to match against subsequent scans).", $"Set {tag} Color Bound", current?.ToString() ?? "");
-
-			if (string.IsNullOrWhiteSpace(input))
-			{
-				if (tag.StartsWith("L")) LowerBound = null;
-				else UpperBound = null;
-			}
-			else if (float.TryParse(input, out float value))
-			{
-				if (tag.StartsWith("L")) LowerBound = value;
-				else UpperBound = value;
-			}
-
 			bedPicture.Invalidate();
 		}
 	}
