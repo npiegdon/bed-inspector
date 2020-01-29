@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Drawing.Drawing2D;
 using System.Drawing;
+using System.Text.RegularExpressions;
 
 namespace BedLeveler
 {
@@ -14,10 +15,18 @@ namespace BedLeveler
 		readonly List<Vector3> points = new List<Vector3>();
 		readonly List<Vector2> toMeasure = new List<Vector2>();
 
+		readonly Regex Marlin1 = ParseSimplifiedDetector("Bed Position X: {X} Y: {Y} Z: {Z}");
+		readonly Regex Marlin2 = ParseSimplifiedDetector("Bed X: {X} Y: {Y} Z: {Z}");
+		Regex customDetection = null;
+
 		public BedLeveler()
 		{
 			InitializeComponent();
-			Text += $" {Application.ProductVersion}";
+
+			var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+			Text += $" {version.Major}.{version.Minor}";
+
+			UpdateCustomDetection(textCustom);
 
 			// Give our best guess at a port name
 			portText.Text = System.IO.Ports.SerialPort.GetPortNames().FirstOrDefault() ?? "COM5";
@@ -44,6 +53,51 @@ namespace BedLeveler
 			}
 		}
 
+		private static Regex ParseSimplifiedDetector(string s)
+		{
+			const string matchFloat = @"[-+]?[0-9]*\.?[0-9]+";
+
+			// The curly braces happen to be a regex-special character and
+			// the escaping is weird, so we use our own escaping scheme
+			string expr = Regex.Escape(s.ReplaceFirst("{X}", "__X__").ReplaceFirst("{Y}", "__Y__").ReplaceFirst("{Z}", "__Z__"));
+			expr = expr.ReplaceFirst("__X__", $"(?<x>{matchFloat})");
+			expr = expr.ReplaceFirst("__Y__", $"(?<y>{matchFloat})");
+			expr = expr.ReplaceFirst("__Z__", $"(?<z>{matchFloat})");
+
+			Regex r = new Regex(expr);
+			return r.GetGroupNumbers().Length == 4 ? r : null;
+		}
+
+		private void UpdateCustomDetection(RichTextBox box)
+		{
+			box.MinimalImpactFormat((t) =>
+			{
+				t.SelectAll();
+				t.SelectionColor = SystemColors.WindowText;
+				t.SelectionFont = t.Font;
+
+				var bold = new Font(t.Font, FontStyle.Bold);
+				void highlightFirst(string s, Color c)
+				{
+					var found = t.Text.IndexOf(s);
+					if (found == -1) return;
+
+					t.Select(found, s.Length);
+					t.SelectionColor = c;
+					t.SelectionFont = bold;
+				}
+
+				highlightFirst("{X}", Color.Red);
+				highlightFirst("{Y}", Color.Green);
+				highlightFirst("{Z}", Color.Blue);
+			});
+
+			Regex r = ParseSimplifiedDetector(box.Text);
+			bool redraw = (r == null) != (customDetection == null);
+			customDetection = r;
+
+			if (redraw) bedPicture.Invalidate();
+		}
 
 		(float?, float?) ColorBounds
 		{
@@ -82,26 +136,37 @@ namespace BedLeveler
 
 		private void DataReceived(string s)
 		{
-			if (s.StartsWith("ok") && s.Length < 4) return;
+			// Omit some of the more verbose printer chatter
+			const int ShortestPossibleMessage = 14;
+			if (s.StartsWith("ok") && s.Length < 2 + ShortestPossibleMessage) return;
+			if (s.Contains("echo") && s.Contains("busy") && s.Contains("processing") && s.Length < 18 + ShortestPossibleMessage) return;
 
 			Invoke(new Action(() => {
 				outputText.AppendText(s);
 				outputText.AppendText(Environment.NewLine);
 				outputText.ScrollToCaret();
 
-				// "Bed Position X: 13.00 Y: 10.00 Z: 0.10"
-				if (!s.StartsWith("Bed Position")) return;
+				Vector3? Check(Regex r)
+				{
+					if (r == null) return null;
 
-				var tokens = s.Split(' ');
-				if (tokens.Length != 8) return;
+					var m = r.Match(s);
+					if (!m.Success) return null;
 
-				float x = float.Parse(tokens[3]);
-				float y = float.Parse(tokens[5]);
-				float z = float.Parse(tokens[7]);
-				points.Add(new Vector3(x, y, z));
+					float x = float.Parse(m.Groups["x"].Value);
+					float y = float.Parse(m.Groups["y"].Value);
+					float z = float.Parse(m.Groups["z"].Value);
+					return new Vector3(x, y, z);
+				}
 
+				Vector3? p = null;
+				if (!p.HasValue && checkMarlin1.Checked) p = Check(Marlin1);
+				if (!p.HasValue && checkMarlin2.Checked) p = Check(Marlin2);
+				if (!p.HasValue && checkCustom.Checked) p = Check(customDetection);
+				if (!p.HasValue) return;
+
+				points.Add(p.Value);
 				MeasureNextPoint();
-
 				bedPicture.Invalidate();
 			}));
 		}
@@ -154,15 +219,18 @@ namespace BedLeveler
 			g.CompositingQuality = CompositingQuality.HighQuality;
 			g.SmoothingMode = SmoothingMode.HighQuality;
 
-			var (w, h) = BedDimensions;
-			if (w < 15 || h < 15)
+			void DrawError(string s)
 			{
 				using (Font font = new Font("Arial", 18.0f, FontStyle.Bold))
 				using (StringFormat format = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
-					g.DrawString("Enter valid bed width and height!", font, Brushes.Red, bedPicture.ClientRectangle, format);
-
-				return;
+					g.DrawString(s, font, Brushes.Red, bedPicture.ClientRectangle, format);
 			}
+
+			var (w, h) = BedDimensions;
+			if (w < 15 || h < 15) { DrawError("Enter valid bed width and height!"); return; }
+
+			if (checkCustom.Checked && customDetection == null) { DrawError("Make sure your custom detection string contains {X}, {Y}, and {Z} somewhere."); return; }
+			if (!checkMarlin1.Checked && !checkMarlin2.Checked && !checkCustom.Checked) { DrawError("Choose at least one detection method."); return; }
 
 			if (points.Count == 0) return;
 
@@ -280,6 +348,17 @@ namespace BedLeveler
 
 		private void RedrawBedImage(object sender, EventArgs e)
 		{
+			bedPicture.Invalidate();
+		}
+
+		private void customDetectionChanged(object sender, EventArgs e)
+		{
+			UpdateCustomDetection(textCustom);
+		}
+
+		private void checkCustomChanged(object sender, EventArgs e)
+		{
+			textCustom.Enabled = checkCustom.Checked;
 			bedPicture.Invalidate();
 		}
 	}

@@ -45,6 +45,11 @@
 			this.widthText = new System.Windows.Forms.TextBox();
 			this.maxZText = new System.Windows.Forms.TextBox();
 			this.minZText = new System.Windows.Forms.TextBox();
+			this.tabDetection = new System.Windows.Forms.TabPage();
+			this.checkCustom = new System.Windows.Forms.CheckBox();
+			this.checkMarlin2 = new System.Windows.Forms.CheckBox();
+			this.checkMarlin1 = new System.Windows.Forms.CheckBox();
+			this.textCustom = new System.Windows.Forms.RichTextBox();
 			this.portText = new System.Windows.Forms.TextBox();
 			this.connectButton = new System.Windows.Forms.Button();
 			this.outputText = new System.Windows.Forms.TextBox();
@@ -71,6 +76,7 @@
 			tabBedSize.SuspendLayout();
 			tabColors.SuspendLayout();
 			tabs.SuspendLayout();
+			this.tabDetection.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.bedPicture)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -95,7 +101,7 @@
 			tabBedSize.Location = new System.Drawing.Point(4, 22);
 			tabBedSize.Name = "tabBedSize";
 			tabBedSize.Padding = new System.Windows.Forms.Padding(3);
-			tabBedSize.Size = new System.Drawing.Size(254, 93);
+			tabBedSize.Size = new System.Drawing.Size(254, 127);
 			tabBedSize.TabIndex = 0;
 			tabBedSize.Text = "Bed Size";
 			tabBedSize.UseVisualStyleBackColor = true;
@@ -166,7 +172,7 @@
 			tabColors.Location = new System.Drawing.Point(4, 22);
 			tabColors.Name = "tabColors";
 			tabColors.Padding = new System.Windows.Forms.Padding(3);
-			tabColors.Size = new System.Drawing.Size(254, 93);
+			tabColors.Size = new System.Drawing.Size(254, 127);
 			tabColors.TabIndex = 1;
 			tabColors.Text = "Colors";
 			tabColors.UseVisualStyleBackColor = true;
@@ -237,11 +243,78 @@
 			tabs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			tabs.Controls.Add(tabBedSize);
 			tabs.Controls.Add(tabColors);
-			tabs.Location = new System.Drawing.Point(12, 508);
+			tabs.Controls.Add(this.tabDetection);
+			tabs.Location = new System.Drawing.Point(12, 488);
 			tabs.Name = "tabs";
 			tabs.SelectedIndex = 0;
-			tabs.Size = new System.Drawing.Size(262, 119);
+			tabs.Size = new System.Drawing.Size(262, 153);
 			tabs.TabIndex = 4;
+			// 
+			// tabDetection
+			// 
+			this.tabDetection.Controls.Add(this.checkCustom);
+			this.tabDetection.Controls.Add(this.checkMarlin2);
+			this.tabDetection.Controls.Add(this.checkMarlin1);
+			this.tabDetection.Controls.Add(this.textCustom);
+			this.tabDetection.Location = new System.Drawing.Point(4, 22);
+			this.tabDetection.Name = "tabDetection";
+			this.tabDetection.Size = new System.Drawing.Size(254, 127);
+			this.tabDetection.TabIndex = 2;
+			this.tabDetection.Text = "Detection";
+			this.tabDetection.UseVisualStyleBackColor = true;
+			// 
+			// checkCustom
+			// 
+			this.checkCustom.AutoSize = true;
+			this.checkCustom.Location = new System.Drawing.Point(6, 63);
+			this.checkCustom.Name = "checkCustom";
+			this.checkCustom.Size = new System.Drawing.Size(61, 17);
+			this.checkCustom.TabIndex = 2;
+			this.checkCustom.Text = "Custom";
+			this.checkCustom.UseVisualStyleBackColor = true;
+			this.checkCustom.CheckedChanged += new System.EventHandler(this.checkCustomChanged);
+			// 
+			// checkMarlin2
+			// 
+			this.checkMarlin2.AutoSize = true;
+			this.checkMarlin2.Checked = true;
+			this.checkMarlin2.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkMarlin2.Location = new System.Drawing.Point(6, 40);
+			this.checkMarlin2.Name = "checkMarlin2";
+			this.checkMarlin2.Size = new System.Drawing.Size(71, 17);
+			this.checkMarlin2.TabIndex = 1;
+			this.checkMarlin2.Text = "Marlin 2.x";
+			this.checkMarlin2.UseVisualStyleBackColor = true;
+			this.checkMarlin2.CheckedChanged += new System.EventHandler(this.RedrawBedImage);
+			// 
+			// checkMarlin1
+			// 
+			this.checkMarlin1.AutoSize = true;
+			this.checkMarlin1.Checked = true;
+			this.checkMarlin1.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkMarlin1.Location = new System.Drawing.Point(6, 17);
+			this.checkMarlin1.Name = "checkMarlin1";
+			this.checkMarlin1.Size = new System.Drawing.Size(71, 17);
+			this.checkMarlin1.TabIndex = 0;
+			this.checkMarlin1.Text = "Marlin 1.x";
+			this.checkMarlin1.UseVisualStyleBackColor = true;
+			this.checkMarlin1.CheckedChanged += new System.EventHandler(this.RedrawBedImage);
+			// 
+			// textCustom
+			// 
+			this.textCustom.DetectUrls = false;
+			this.textCustom.Enabled = false;
+			this.textCustom.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.textCustom.Location = new System.Drawing.Point(23, 86);
+			this.textCustom.Multiline = false;
+			this.textCustom.Name = "textCustom";
+			this.textCustom.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+			this.textCustom.ShortcutsEnabled = false;
+			this.textCustom.Size = new System.Drawing.Size(220, 22);
+			this.textCustom.TabIndex = 3;
+			this.textCustom.Text = "Bed X: {X} Y: {Y} Z: {Z}";
+			this.textCustom.WordWrap = false;
+			this.textCustom.TextChanged += new System.EventHandler(this.customDetectionChanged);
 			// 
 			// portText
 			// 
@@ -268,7 +341,7 @@
 			this.outputText.Multiline = true;
 			this.outputText.Name = "outputText";
 			this.outputText.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.outputText.Size = new System.Drawing.Size(262, 430);
+			this.outputText.Size = new System.Drawing.Size(262, 416);
 			this.outputText.TabIndex = 3;
 			// 
 			// disconnectButton
@@ -376,6 +449,8 @@
 			tabColors.ResumeLayout(false);
 			tabColors.PerformLayout();
 			tabs.ResumeLayout(false);
+			this.tabDetection.ResumeLayout(false);
+			this.tabDetection.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.bedPicture)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -398,5 +473,10 @@
 		private System.Windows.Forms.TextBox widthText;
 		private System.Windows.Forms.TextBox maxZText;
 		private System.Windows.Forms.TextBox minZText;
+		private System.Windows.Forms.TabPage tabDetection;
+		private System.Windows.Forms.CheckBox checkCustom;
+		private System.Windows.Forms.CheckBox checkMarlin2;
+		private System.Windows.Forms.CheckBox checkMarlin1;
+		private System.Windows.Forms.RichTextBox textCustom;
 	}
 }
