@@ -396,7 +396,7 @@
 			this.setZ5Button.Name = "setZ5Button";
 			this.setZ5Button.Size = new System.Drawing.Size(262, 23);
 			this.setZ5Button.TabIndex = 6;
-			this.setZ5Button.Text = "Set Z = 5.0mm";
+			this.setZ5Button.Text = "Move Z to 5.0mm";
 			this.setZ5Button.UseVisualStyleBackColor = true;
 			this.setZ5Button.Click += new System.EventHandler(this.SetZto5);
 			// 
