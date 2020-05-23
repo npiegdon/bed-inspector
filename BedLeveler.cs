@@ -121,12 +121,15 @@ namespace BedLeveler
 			if (port == null) return;
 			if (toMeasure.Count == 0) return;
 
+			// Start near the bed center (or [75, 75] if we don't have plausible bed dimensions for whatever reason)
 			var (w, h) = BedDimensions;
 			Vector2 current = new Vector2(w > 10 ? w / 2.0f : 75.0f, h > 10 ? h / 2.0f : 75.0f);
+
+			// If we've already measured something, start looking for the next point around there instead
 			if (points.Count > 0) current = (from p in points select new Vector2(p.X, p.Y)).Last();
 
+			// Find the next closest point we need to test
 			var next = (from p in toMeasure let distSq = (current.X - p.X) * (current.X - p.X) + (current.Y - p.Y) * (current.Y - p.Y) orderby distSq select p).First();
-
 			toMeasure.Remove(next);
 
 			// If we've already measured it, don't measure it again
@@ -351,12 +354,12 @@ namespace BedLeveler
 			bedPicture.Invalidate();
 		}
 
-		private void customDetectionChanged(object sender, EventArgs e)
+		private void CustomDetectionChanged(object sender, EventArgs e)
 		{
 			UpdateCustomDetection(textCustom);
 		}
 
-		private void checkCustomChanged(object sender, EventArgs e)
+		private void CheckCustomChanged(object sender, EventArgs e)
 		{
 			textCustom.Enabled = checkCustom.Checked;
 			bedPicture.Invalidate();

@@ -272,7 +272,7 @@
 			this.checkCustom.TabIndex = 2;
 			this.checkCustom.Text = "Custom";
 			this.checkCustom.UseVisualStyleBackColor = true;
-			this.checkCustom.CheckedChanged += new System.EventHandler(this.checkCustomChanged);
+			this.checkCustom.CheckedChanged += new System.EventHandler(this.CheckCustomChanged);
 			// 
 			// checkMarlin2
 			// 
@@ -314,7 +314,7 @@
 			this.textCustom.TabIndex = 3;
 			this.textCustom.Text = "Bed X: {X} Y: {Y} Z: {Z}";
 			this.textCustom.WordWrap = false;
-			this.textCustom.TextChanged += new System.EventHandler(this.customDetectionChanged);
+			this.textCustom.TextChanged += new System.EventHandler(this.CustomDetectionChanged);
 			// 
 			// portText
 			// 
