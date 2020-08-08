@@ -6,6 +6,7 @@ using System.Linq;
 using System.Drawing.Drawing2D;
 using System.Drawing;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace BedLeveler
 {
@@ -18,6 +19,11 @@ namespace BedLeveler
 		readonly Regex Marlin1 = ParseSimplifiedDetector("Bed Position X: {X} Y: {Y} Z: {Z}");
 		readonly Regex Marlin2 = ParseSimplifiedDetector("Bed X: {X} Y: {Y} Z: {Z}");
 		Regex customDetection = null;
+
+		readonly int zMeasureHeight = 2;
+		readonly int feedSpeed = 6000;
+		readonly string decimalSeparator = ".";
+		readonly static string systemDecimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
 
 		public BedLeveler()
 		{
@@ -55,7 +61,7 @@ namespace BedLeveler
 
 		private static Regex ParseSimplifiedDetector(string s)
 		{
-			const string matchFloat = @"[-+]?[0-9]*\.?[0-9]+";
+			string matchFloat = @"[-+]?[0-9]*[\." + systemDecimalSeparator + @"]?[0-9]+";
 
 			// The curly braces happen to be a regex-special character and
 			// the escaping is weird, so we use our own escaping scheme
@@ -112,7 +118,7 @@ namespace BedLeveler
 		{
 			if (port == null) return;
 			port.Send("G90");
-			port.Send($"G1 X{x} Y{y} Z1 F5000");
+			port.Send($"G1 X{x} Y{y} Z{zMeasureHeight} F{feedSpeed}");
 			port.Send("G30");
 		}
 
@@ -143,6 +149,11 @@ namespace BedLeveler
 			const int ShortestPossibleMessage = 14;
 			if (s.StartsWith("ok") && s.Length < 2 + ShortestPossibleMessage) return;
 			if (s.Contains("echo") && s.Contains("busy") && s.Contains("processing") && s.Length < 18 + ShortestPossibleMessage) return;
+
+			if (!systemDecimalSeparator.Equals(decimalSeparator))
+			{
+				s = s.Replace(decimalSeparator, systemDecimalSeparator);
+			}
 
 			Invoke(new Action(() => {
 				outputText.AppendText(s);
@@ -337,16 +348,16 @@ namespace BedLeveler
 
 			if (port != null)
 			{
-				port.Send($"G1 Y{h} X0 Z2 F6000"); port.Send("G30");
-				port.Send($"G1 X0 Y0 Z2 F6000"); port.Send("G30");
-				port.Send($"G1 Y0 X{w} Z2 F6000"); port.Send("G30");
-				port.Send($"G1 Y{h} X{w} Z2 F6000"); port.Send("G30");
+				port.Send($"G1 Y{h} X0 Z{zMeasureHeight} {feedSpeed}"); port.Send("G30");
+				port.Send($"G1 X0 Y0 Z{zMeasureHeight} {feedSpeed}"); port.Send("G30");
+				port.Send($"G1 Y0 X{w} Z{zMeasureHeight} {feedSpeed}"); port.Send("G30");
+				port.Send($"G1 Y{h} X{w} Z{zMeasureHeight} {feedSpeed}"); port.Send("G30");
 			}
 		}
 
 		private void SetZto5(object sender, EventArgs e)
 		{
-			if (port != null) port.Send("G1 Z5 F6000");
+			if (port != null) port.Send($"G1 Z5 {feedSpeed}");
 		}
 
 		private void RedrawBedImage(object sender, EventArgs e)
