@@ -60,6 +60,8 @@
             this.setZ5Button = new System.Windows.Forms.Button();
             this.measureCornersButton = new System.Windows.Forms.Button();
             this.recenterButton = new System.Windows.Forms.Button();
+            this.autolevelLabel = new System.Windows.Forms.Label();
+            this.autolevelCheckBox = new System.Windows.Forms.CheckBox();
             measureEveryUnits = new System.Windows.Forms.Label();
             tabBedSize = new System.Windows.Forms.TabPage();
             heightUnits = new System.Windows.Forms.Label();
@@ -92,6 +94,8 @@
             // 
             // tabBedSize
             // 
+            tabBedSize.Controls.Add(this.autolevelCheckBox);
+            tabBedSize.Controls.Add(this.autolevelLabel);
             tabBedSize.Controls.Add(heightUnits);
             tabBedSize.Controls.Add(this.heightText);
             tabBedSize.Controls.Add(heightLabel);
@@ -423,6 +427,24 @@
             this.recenterButton.UseVisualStyleBackColor = true;
             this.recenterButton.Click += new System.EventHandler(this.ClearClicked);
             // 
+            // autolevelLabel
+            // 
+            this.autolevelLabel.AutoSize = true;
+            this.autolevelLabel.Location = new System.Drawing.Point(6, 75);
+            this.autolevelLabel.Name = "autolevelLabel";
+            this.autolevelLabel.Size = new System.Drawing.Size(75, 13);
+            this.autolevelLabel.TabIndex = 6;
+            this.autolevelLabel.Text = "Auto-level bed";
+            // 
+            // autolevelCheckBox
+            // 
+            this.autolevelCheckBox.AutoSize = true;
+            this.autolevelCheckBox.Location = new System.Drawing.Point(88, 75);
+            this.autolevelCheckBox.Name = "autolevelCheckBox";
+            this.autolevelCheckBox.Size = new System.Drawing.Size(15, 14);
+            this.autolevelCheckBox.TabIndex = 7;
+            this.autolevelCheckBox.UseVisualStyleBackColor = true;
+            // 
             // BedLeveler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -479,5 +501,7 @@
 		private System.Windows.Forms.CheckBox checkMarlin2;
 		private System.Windows.Forms.CheckBox checkMarlin1;
 		private System.Windows.Forms.RichTextBox textCustom;
+		private System.Windows.Forms.Label autolevelLabel;
+		private System.Windows.Forms.CheckBox autolevelCheckBox;
 	}
 }
