@@ -191,6 +191,10 @@ namespace BedLeveler
 			connectButton.Enabled = false;
 			disconnectButton.Enabled = true;
 
+			port.Send("G21");
+			port.Send("G90"); // absolute positioning
+			port.Send("G1 F9000");
+
 			ClearClicked(this, new EventArgs());
 		}
 
