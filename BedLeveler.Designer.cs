@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
             System.Windows.Forms.Label measureEveryUnits;
-            System.Windows.Forms.TabPage tabBedSize;
+            System.Windows.Forms.TabPage tabPrinter;
             System.Windows.Forms.Label heightUnits;
             System.Windows.Forms.Label heightLabel;
             System.Windows.Forms.Label widthUnits;
@@ -63,7 +63,7 @@
             this.autolevelLabel = new System.Windows.Forms.Label();
             this.autolevelCheckBox = new System.Windows.Forms.CheckBox();
             measureEveryUnits = new System.Windows.Forms.Label();
-            tabBedSize = new System.Windows.Forms.TabPage();
+            tabPrinter = new System.Windows.Forms.TabPage();
             heightUnits = new System.Windows.Forms.Label();
             heightLabel = new System.Windows.Forms.Label();
             widthUnits = new System.Windows.Forms.Label();
@@ -75,7 +75,7 @@
             minZUnits = new System.Windows.Forms.Label();
             minZLabel = new System.Windows.Forms.Label();
             tabs = new System.Windows.Forms.TabControl();
-            tabBedSize.SuspendLayout();
+            tabPrinter.SuspendLayout();
             tabColors.SuspendLayout();
             tabs.SuspendLayout();
             this.tabDetection.SuspendLayout();
@@ -92,23 +92,23 @@
             measureEveryUnits.TabIndex = 10;
             measureEveryUnits.Text = "mm";
             // 
-            // tabBedSize
+            // tabPrinter
             // 
-            tabBedSize.Controls.Add(this.autolevelCheckBox);
-            tabBedSize.Controls.Add(this.autolevelLabel);
-            tabBedSize.Controls.Add(heightUnits);
-            tabBedSize.Controls.Add(this.heightText);
-            tabBedSize.Controls.Add(heightLabel);
-            tabBedSize.Controls.Add(widthUnits);
-            tabBedSize.Controls.Add(this.widthText);
-            tabBedSize.Controls.Add(widthLabel);
-            tabBedSize.Location = new System.Drawing.Point(4, 22);
-            tabBedSize.Name = "tabBedSize";
-            tabBedSize.Padding = new System.Windows.Forms.Padding(3);
-            tabBedSize.Size = new System.Drawing.Size(254, 127);
-            tabBedSize.TabIndex = 0;
-            tabBedSize.Text = "Bed Size";
-            tabBedSize.UseVisualStyleBackColor = true;
+            tabPrinter.Controls.Add(this.autolevelCheckBox);
+            tabPrinter.Controls.Add(this.autolevelLabel);
+            tabPrinter.Controls.Add(heightUnits);
+            tabPrinter.Controls.Add(this.heightText);
+            tabPrinter.Controls.Add(heightLabel);
+            tabPrinter.Controls.Add(widthUnits);
+            tabPrinter.Controls.Add(this.widthText);
+            tabPrinter.Controls.Add(widthLabel);
+            tabPrinter.Location = new System.Drawing.Point(4, 22);
+            tabPrinter.Name = "tabPrinter";
+            tabPrinter.Padding = new System.Windows.Forms.Padding(3);
+            tabPrinter.Size = new System.Drawing.Size(254, 127);
+            tabPrinter.TabIndex = 0;
+            tabPrinter.Text = "Printer Settings";
+            tabPrinter.UseVisualStyleBackColor = true;
             // 
             // heightUnits
             // 
@@ -245,7 +245,7 @@
             // tabs
             // 
             tabs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            tabs.Controls.Add(tabBedSize);
+            tabs.Controls.Add(tabPrinter);
             tabs.Controls.Add(tabColors);
             tabs.Controls.Add(this.tabDetection);
             tabs.Location = new System.Drawing.Point(12, 488);
@@ -467,8 +467,8 @@
             this.Name = "BedLeveler";
             this.Text = "Printer Bed Inspector";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BedLeveler_FormClosing);
-            tabBedSize.ResumeLayout(false);
-            tabBedSize.PerformLayout();
+            tabPrinter.ResumeLayout(false);
+            tabPrinter.PerformLayout();
             tabColors.ResumeLayout(false);
             tabColors.PerformLayout();
             tabs.ResumeLayout(false);
