@@ -346,13 +346,10 @@ namespace BedLeveler
 			var (valid, w, h) = CheckedDimensions;
 			if (!valid) return;
 
-			if (port != null)
-			{
-				port.Send($"G1 Y{h} X0 Z{zMeasureHeight} {feedSpeed}"); port.Send("G30");
-				port.Send($"G1 X0 Y0 Z{zMeasureHeight} {feedSpeed}"); port.Send("G30");
-				port.Send($"G1 Y0 X{w} Z{zMeasureHeight} {feedSpeed}"); port.Send("G30");
-				port.Send($"G1 Y{h} X{w} Z{zMeasureHeight} {feedSpeed}"); port.Send("G30");
-			}
+			MeasurePoint(0, h);
+			MeasurePoint(0, 0);
+			MeasurePoint(w, 0);
+			MeasurePoint(w, h);
 		}
 
 		private void SetZto5(object sender, EventArgs e)
