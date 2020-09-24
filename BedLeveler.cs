@@ -341,6 +341,25 @@ namespace BedLeveler
 			MeasureNextPoint();
 		}
 
+		private void SendCommand(object sender, EventArgs e)
+		{
+			if (commandBox.Text.Length > 0)
+			{
+				port.Send(commandBox.Text.Trim());
+				commandBox.ResetText();
+			}
+		}
+
+		private void CommandBox_Enter(object sender, EventArgs e)
+		{
+			ActiveForm.AcceptButton = sendCommandButton;
+		}
+
+		private void CommandBox_Leave(object sender, EventArgs e)
+		{
+			ActiveForm.AcceptButton = null;
+		}
+
 		private void BedLeveler_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			if (port != null)

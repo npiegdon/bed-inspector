@@ -1,4 +1,6 @@
-﻿namespace BedLeveler
+﻿using System;
+
+namespace BedLeveler
 {
 	partial class BedLeveler
 	{
@@ -62,6 +64,8 @@
             this.recenterButton = new System.Windows.Forms.Button();
             this.autolevelLabel = new System.Windows.Forms.Label();
             this.autolevelCheckBox = new System.Windows.Forms.CheckBox();
+            this.commandBox = new System.Windows.Forms.TextBox();
+            this.sendCommandButton = new System.Windows.Forms.Button();
             measureEveryUnits = new System.Windows.Forms.Label();
             tabPrinter = new System.Windows.Forms.TabPage();
             heightUnits = new System.Windows.Forms.Label();
@@ -445,11 +449,33 @@
             this.autolevelCheckBox.TabIndex = 7;
             this.autolevelCheckBox.UseVisualStyleBackColor = true;
             // 
-            // BedLeveler
+            // commandBox
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.commandBox.Location = new System.Drawing.Point(12, 464);
+            this.commandBox.Name = "commandBox";
+            this.commandBox.Size = new System.Drawing.Size(210, 20);
+            this.commandBox.TabIndex = 11;
+			this.commandBox.AcceptsReturn = false;
+			this.commandBox.Enter += new EventHandler(this.CommandBox_Enter);
+			this.commandBox.Leave += new EventHandler(this.CommandBox_Leave);
+			// 
+			// sendCommandButton
+			// 
+			this.sendCommandButton.Location = new System.Drawing.Point(228, 463);
+            this.sendCommandButton.Name = "sendCommandButton";
+            this.sendCommandButton.Size = new System.Drawing.Size(42, 23);
+            this.sendCommandButton.TabIndex = 12;
+            this.sendCommandButton.Text = "Send";
+            this.sendCommandButton.UseVisualStyleBackColor = true;
+			this.sendCommandButton.Click += new System.EventHandler(this.SendCommand);
+			// 
+			// BedLeveler
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1084, 800);
+            this.Controls.Add(this.sendCommandButton);
+            this.Controls.Add(this.commandBox);
             this.Controls.Add(tabs);
             this.Controls.Add(measureEveryUnits);
             this.Controls.Add(this.measureEveryText);
@@ -503,5 +529,7 @@
 		private System.Windows.Forms.RichTextBox textCustom;
 		private System.Windows.Forms.Label autolevelLabel;
 		private System.Windows.Forms.CheckBox autolevelCheckBox;
+		private System.Windows.Forms.TextBox commandBox;
+		private System.Windows.Forms.Button sendCommandButton;
 	}
 }
