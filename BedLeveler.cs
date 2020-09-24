@@ -20,7 +20,7 @@ namespace BedLeveler
 		readonly Regex Marlin2 = ParseSimplifiedDetector("Bed X: {X} Y: {Y} Z: {Z}");
 		Regex customDetection = null;
 
-		readonly int zMeasureHeight = 2;
+		readonly int zMeasureHeight = 3;
 		readonly int feedSpeed = 6000;
 		readonly string decimalSeparator = ".";
 		readonly static string systemDecimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
@@ -308,6 +308,7 @@ namespace BedLeveler
 
 			if (port != null)
 			{
+				port.Send("G1 Z2"); //avoid gauging surface
 				port.Send("G28");
 				port.Send("G30");
 			}
