@@ -310,7 +310,14 @@ namespace BedLeveler
 			{
 				port.Send("G1 Z2"); //avoid gauging surface
 				port.Send("G28");
-				port.Send("G30");
+
+				if (autolevelCheckBox.Checked)
+				{
+					port.Send("G29"); //run auto bed leveling. Must occur AFTER G28
+				}
+
+				var (w, h) = BedDimensions;
+				MeasurePoint(w / 2.0f, h / 2.0f);
 			}
 		}
 
