@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("BedLeveler")]
-[assembly: AssemblyCopyright("Copyright ©2018-2020 Nicholas Piegdon")]
+[assembly: AssemblyCopyright("Copyright ©2018-2021 Nicholas Piegdon")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

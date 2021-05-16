@@ -67,9 +67,9 @@ namespace BedLeveler
 
 		public PrinterPort(string portName, Action<string> callback)
 		{
-			Callback = callback ?? throw new ArgumentOutOfRangeException("Bad callback");
+			Callback = callback ?? throw new ArgumentOutOfRangeException(nameof(callback), "Bad callback");
 
-			if (string.IsNullOrWhiteSpace(portName)) throw new ArgumentOutOfRangeException("Bad port");
+			if (string.IsNullOrWhiteSpace(portName)) throw new ArgumentOutOfRangeException(nameof(portName), "Bad port");
 			Port = new SerialPort(portName, 115200, Parity.None, 8, StopBits.One)
 			{
 				Handshake = Handshake.None,
@@ -91,7 +91,7 @@ namespace BedLeveler
 
 		private async void Listen()
 		{
-			LineSplitter splitter = new LineSplitter((byte)'\n');
+			LineSplitter splitter = new((byte)'\n');
 			splitter.LineReceived += (b) =>
 			{
 				if (b.Length == 0) return;
@@ -110,7 +110,7 @@ namespace BedLeveler
 
 				try
 				{
-					int read = await Port.BaseStream.ReadAsync(buffer, 0, buffer.Length);
+					int read = await Port.BaseStream.ReadAsync(buffer.AsMemory(0, buffer.Length));
 					if (read == 0) continue;
 
 					byte[] handoff = new byte[read];

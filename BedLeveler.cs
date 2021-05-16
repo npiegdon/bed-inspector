@@ -13,8 +13,8 @@ namespace BedLeveler
 	public partial class BedLeveler : Form
 	{
 		PrinterPort port;
-		readonly List<Vector3> points = new List<Vector3>();
-		readonly List<Vector2> toMeasure = new List<Vector2>();
+		readonly List<Vector3> points = new();
+		readonly List<Vector2> toMeasure = new();
 
 		readonly Regex Marlin1 = ParseSimplifiedDetector("Bed Position X: {X} Y: {Y} Z: {Z}");
 		readonly Regex Marlin2 = ParseSimplifiedDetector("Bed X: {X} Y: {Y} Z: {Z}");
@@ -70,7 +70,7 @@ namespace BedLeveler
 			expr = expr.ReplaceFirst("__Y__", $"(?<y>{matchFloat})");
 			expr = expr.ReplaceFirst("__Z__", $"(?<z>{matchFloat})");
 
-			Regex r = new Regex(expr);
+			Regex r = new(expr);
 			return r.GetGroupNumbers().Length == 4 ? r : null;
 		}
 
@@ -129,7 +129,7 @@ namespace BedLeveler
 
 			// Start near the bed center (or [75, 75] if we don't have plausible bed dimensions for whatever reason)
 			var (w, h) = BedDimensions;
-			Vector2 current = new Vector2(w > 10 ? w / 2.0f : 75.0f, h > 10 ? h / 2.0f : 75.0f);
+			Vector2 current = new(w > 10 ? w / 2.0f : 75.0f, h > 10 ? h / 2.0f : 75.0f);
 
 			// If we've already measured something, start looking for the next point around there instead
 			if (points.Count > 0) current = (from p in points select new Vector2(p.X, p.Y)).Last();
@@ -191,9 +191,9 @@ namespace BedLeveler
 			connectButton.Enabled = false;
 			disconnectButton.Enabled = true;
 
-			port.Send("G21");
-			port.Send("G90"); // absolute positioning
-			port.Send("G1 F9000");
+			port.Send($"G21");
+			port.Send($"G90"); // absolute positioning
+			port.Send($"G1 F{feedSpeed}");
 
 			ClearClicked(this, new EventArgs());
 		}
@@ -227,7 +227,7 @@ namespace BedLeveler
 			else return Color.FromArgb(255, v, p, q);
 		}
 
-		float Lerp(float a, float b, float by) { return a * by + b * (1 - by); }
+		static float Lerp(float a, float b, float by) { return a * by + b * (1 - by); }
 		const int Radius = 20;
 
 		private void BedPaint(object sender, PaintEventArgs e)
@@ -239,9 +239,9 @@ namespace BedLeveler
 
 			void DrawError(string s)
 			{
-				using (Font font = new Font("Arial", 18.0f, FontStyle.Bold))
-				using (StringFormat format = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
-					g.DrawString(s, font, Brushes.Red, bedPicture.ClientRectangle, format);
+				using Font font = new("Arial", 18.0f, FontStyle.Bold);
+				using StringFormat format = new() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+				g.DrawString(s, font, Brushes.Red, bedPicture.ClientRectangle, format);
 			}
 
 			var (w, h) = BedDimensions;
@@ -261,27 +261,25 @@ namespace BedLeveler
 
 			float range = max - min;
 
-			using (Font font = new Font("Arial", 11.0f, FontStyle.Bold))
-			using (StringFormat format = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
+			using Font font = new("Arial", 11.0f, FontStyle.Bold);
+			using StringFormat format = new() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
 			foreach (var p in points)
 			{
 				float zPercent = Math.Max(0.0f, Math.Min(1.0f, range < 0.001 ? 1.0f : (p.Z - min) / range));
 				float hue = Lerp(0, 240, zPercent);
 				Color c = ColorFromHSV(hue, 1.0, 1.0);
 
-				Point pt = new Point((int)((bedPicture.Width - 2 * Radius) * p.X / w), (int)((bedPicture.Height - 2 * Radius) * (h - p.Y) / h));
+				Point pt = new((int)((bedPicture.Width - 2 * Radius) * p.X / w), (int)((bedPicture.Height - 2 * Radius) * (h - p.Y) / h));
 
-				using (GraphicsPath path = new GraphicsPath())
-				{
-					var rect = new Rectangle(pt, new Size(2 * Radius, 2 * Radius));
-					path.AddEllipse(rect);
+				using GraphicsPath path = new();
+				var rect = new Rectangle(pt, new Size(2 * Radius, 2 * Radius));
+				path.AddEllipse(rect);
 
-					using (var b = new SolidBrush(c)) g.FillPath(b, path);
+				using (var b = new SolidBrush(c)) g.FillPath(b, path);
 
-					g.SetClip(path);
-					g.DrawString(p.Z.ToString("0.00"), font, Brushes.Black, rect, format);
-					g.ResetClip();
-				}
+				g.SetClip(path);
+				g.DrawString(p.Z.ToString("0.00"), font, Brushes.Black, rect, format);
+				g.ResetClip();
 			}
 		}
 
@@ -308,13 +306,11 @@ namespace BedLeveler
 
 			if (port != null)
 			{
-				port.Send("G1 Z2"); //avoid gauging surface
-				port.Send("G28");
+				port.Send($"G1 Z{zMeasureHeight}"); // Avoid gouging surface if we were in the middle of a measurement
+				port.Send($"G28");
 
-				if (autolevelCheckBox.Checked)
-				{
-					port.Send("G29"); //run auto bed leveling. Must occur AFTER G28
-				}
+				// Auto bed leveling must occur AFTER G28
+				if (autolevelCheckBox.Checked) port.Send("G29"); 
 
 				var (w, h) = BedDimensions;
 				MeasurePoint(w / 2.0f, h / 2.0f);
@@ -350,15 +346,8 @@ namespace BedLeveler
 			}
 		}
 
-		private void CommandBox_Enter(object sender, EventArgs e)
-		{
-			ActiveForm.AcceptButton = sendCommandButton;
-		}
-
-		private void CommandBox_Leave(object sender, EventArgs e)
-		{
-			ActiveForm.AcceptButton = null;
-		}
+		private void CommandBox_Enter(object sender, EventArgs e) => ActiveForm.AcceptButton = sendCommandButton;
+		private void CommandBox_Leave(object sender, EventArgs e) => ActiveForm.AcceptButton = null;
 
 		private void BedLeveler_FormClosing(object sender, FormClosingEventArgs e)
 		{
