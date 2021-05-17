@@ -20,10 +20,8 @@ namespace BedLeveler
 		readonly Regex Marlin2 = ParseSimplifiedDetector("Bed X: {X} Y: {Y} Z: {Z}");
 		Regex customDetection = null;
 
-		readonly int zMeasureHeight = 3;
-		readonly int feedSpeed = 6000;
-		readonly string decimalSeparator = ".";
-		readonly static string systemDecimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+		const int zMeasureHeight = 3;
+		const int feedSpeed = 6000;
 
 		public BedLeveler()
 		{
@@ -61,7 +59,8 @@ namespace BedLeveler
 
 		private static Regex ParseSimplifiedDetector(string s)
 		{
-			string matchFloat = @"[-+]?[0-9]*[\." + systemDecimalSeparator + @"]?[0-9]+";
+			// This should work with either common decimal separator (period & comma)
+			string matchFloat = @"[-+]?[0-9]*[\.,]?[0-9]+";
 
 			// The curly braces happen to be a regex-special character and
 			// the escaping is weird, so we use our own escaping scheme
@@ -150,11 +149,6 @@ namespace BedLeveler
 			if (s.StartsWith("ok") && s.Length < 2 + ShortestPossibleMessage) return;
 			if (s.Contains("echo") && s.Contains("busy") && s.Contains("processing") && s.Length < 18 + ShortestPossibleMessage) return;
 
-			if (!systemDecimalSeparator.Equals(decimalSeparator))
-			{
-				s = s.Replace(decimalSeparator, systemDecimalSeparator);
-			}
-
 			Invoke(new Action(() => {
 				outputText.AppendText(s);
 				outputText.AppendText(Environment.NewLine);
@@ -167,10 +161,16 @@ namespace BedLeveler
 					var m = r.Match(s);
 					if (!m.Success) return null;
 
-					float x = float.Parse(m.Groups["x"].Value);
-					float y = float.Parse(m.Groups["y"].Value);
-					float z = float.Parse(m.Groups["z"].Value);
-					return new Vector3(x, y, z);
+					NumberFormatInfo format = (NumberFormatInfo)CultureInfo.InvariantCulture.NumberFormat.Clone();
+					foreach (var sep in ".,")
+					{
+						format.NumberDecimalSeparator = sep.ToString();
+						if (float.TryParse(m.Groups["x"].Value, NumberStyles.Float, format, out float x)
+						 && float.TryParse(m.Groups["y"].Value, NumberStyles.Float, format, out float y)
+						 && float.TryParse(m.Groups["z"].Value, NumberStyles.Float, format, out float z))
+							return new Vector3(x, y, z);
+					}
+					return null;
 				}
 
 				Vector3? p = null;
