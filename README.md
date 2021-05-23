@@ -8,10 +8,11 @@ While troubleshooting prints that always peeled up in a particular spot, I spot-
 
 ## Instructions
 
+1. Adjust the left/right and top/bottom boundaries in the box to match the dimensions of your printer.  Giving all four dimensions (instead of just width/height) allows you to add a bit of margin in case the sensor's offset makes it go past the edge of the bed.
 1. Type in your printer's serial port address at the top left and click Connect. (If it's the only serial device connected, the address should be auto-detected.)
-2. Your printer should automatically home, center, and measure the height. (G28 and G30)
-3. Click around in the field to measure that location. (G1 followed by G30)
-4. To measure many points automatically, click the "Measure every" button at the bottom-left.  (Change the number in the box first if you'd like to adjust the spacing.)
+1. Your printer should automatically home, center, and measure the height. (G28 and G30)
+1. Click around in the field to measure that location. (G1 followed by G30)
+1. To measure many points automatically, click the "Measure every" button at the bottom-left.  (Change the number in the box first if you'd like to adjust the spacing.)
 
 ## Compatibility
 
@@ -29,4 +30,4 @@ Go to the *Detection* tab, enable the *Custom* pattern, enter that text and just
 
 	Zpracování Ložní X: {X} Y: {Y} Z: {Z}
 
-Now, clicking a location in the black area should produce a colored circle!  
+Now, clicking a location in the black area should produce a colored circle!

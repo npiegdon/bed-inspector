@@ -36,24 +36,30 @@ namespace BedLeveler
 			portText.Text = System.IO.Ports.SerialPort.GetPortNames().FirstOrDefault() ?? "COM5";
 		}
 
-		(int, int) BedDimensions
+		Rectangle BedDimensions
+		{
+			get => new(int.TryParse(leftText.Text, out int left) ? left : 0,  int.TryParse(topText.Text, out int top) ? top : 0,
+				int.TryParse(rightText.Text, out int right) ? right : 0, int.TryParse(bottomText.Text, out int bottom) ? bottom : 0);
+		}
+
+		(bool, Rectangle) CheckedDimensions
 		{
 			get
 			{
-				return (int.TryParse(widthText.Text, out int width) ? width : 0,
-					int.TryParse(heightText.Text, out int height) ? height : 0);
+				var bed = BedDimensions;
+				if (bed.Width >= 10 && bed.Height >= 10) return (true, bed);
+
+				MessageBox.Show("Double-check you've typed integers in all of the bed dimension boxes.", "Can't read bed dimensions", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return (false, new());
 			}
 		}
 
-		(bool, int, int) CheckedDimensions
+		Vector2 BedCenter
 		{
 			get
 			{
-				var (w, h) = BedDimensions;
-				if (w >= 10 && h >= 10) return (true, w, h);
-
-				MessageBox.Show("Double-check you've typed integers in the bed width and height boxes.", "Can't read bed dimensions", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return (false, 0, 0);
+				var bed = BedDimensions;
+				return new((bed.Right - bed.Left) / 2.0f, (bed.Bottom - bed.Top) / 2.0f);
 			}
 		}
 
@@ -113,6 +119,7 @@ namespace BedLeveler
 			}
 		}
 
+		private void MeasurePoint(Vector2 p) => MeasurePoint(p.X, p.Y);
 		private void MeasurePoint(float x, float y)
 		{
 			if (port == null) return;
@@ -126,9 +133,7 @@ namespace BedLeveler
 			if (port == null) return;
 			if (toMeasure.Count == 0) return;
 
-			// Start near the bed center (or [75, 75] if we don't have plausible bed dimensions for whatever reason)
-			var (w, h) = BedDimensions;
-			Vector2 current = new(w > 10 ? w / 2.0f : 75.0f, h > 10 ? h / 2.0f : 75.0f);
+			Vector2 current = BedCenter;
 
 			// If we've already measured something, start looking for the next point around there instead
 			if (points.Count > 0) current = (from p in points select new Vector2(p.X, p.Y)).Last();
@@ -139,7 +144,7 @@ namespace BedLeveler
 
 			// If we've already measured it, don't measure it again
 			if ((from p in points where p.X == next.X && p.Y == next.Y select p).Any()) MeasureNextPoint();
-			else MeasurePoint(next.X, next.Y);
+			else MeasurePoint(next);
 		}
 
 		private void DataReceived(string s)
@@ -190,6 +195,7 @@ namespace BedLeveler
 			if (port == null) port = new PrinterPort(portText.Text, DataReceived);
 			connectButton.Enabled = false;
 			disconnectButton.Enabled = true;
+			sendCommandButton.Enabled = true;
 
 			port.Send($"G21");
 			port.Send($"G90"); // absolute positioning
@@ -204,8 +210,9 @@ namespace BedLeveler
 			port.Dispose();
 			port = null;
 
-			disconnectButton.Enabled = false;
 			connectButton.Enabled = true;
+			disconnectButton.Enabled = false;
+			sendCommandButton.Enabled = false;
 		}
 
 		static Color ColorFromHSV(double hue, double saturation, double value)
@@ -244,8 +251,8 @@ namespace BedLeveler
 				g.DrawString(s, font, Brushes.Red, bedPicture.ClientRectangle, format);
 			}
 
-			var (w, h) = BedDimensions;
-			if (w < 15 || h < 15) { DrawError("Enter valid bed width and height!"); return; }
+			var bed = BedDimensions;
+			if (bed.Width < 15 || bed.Height < 15) { DrawError("Enter valid bed dimensions!"); return; }
 
 			if (checkCustom.Checked && customDetection == null) { DrawError("Make sure your custom detection string contains {X}, {Y}, and {Z} somewhere."); return; }
 			if (!checkMarlin1.Checked && !checkMarlin2.Checked && !checkCustom.Checked) { DrawError("Choose at least one detection method."); return; }
@@ -269,7 +276,11 @@ namespace BedLeveler
 				float hue = Lerp(0, 240, zPercent);
 				Color c = ColorFromHSV(hue, 1.0, 1.0);
 
-				Point pt = new((int)((bedPicture.Width - 2 * Radius) * p.X / w), (int)((bedPicture.Height - 2 * Radius) * (h - p.Y) / h));
+				// Our picture always starts with (0, 0) in the top corner, despite the
+				// dimensions the user is measuring.  If they have an offset, Width/Height
+				// doesn't give us the whole picture anymore.
+				Point pt = new((int)((bedPicture.Width - 2 * Radius) * p.X / bed.Right),
+									(int)((bedPicture.Height - 2 * Radius) * (bed.Bottom - p.Y) / bed.Bottom));
 
 				using GraphicsPath path = new();
 				var rect = new Rectangle(pt, new Size(2 * Radius, 2 * Radius));
@@ -288,11 +299,11 @@ namespace BedLeveler
 			// Clicking the bed interrupts patterns
 			toMeasure.Clear();
 
-			var (valid, w, h) = CheckedDimensions;
+			var (valid, bed) = CheckedDimensions;
 			if (!valid) return;
 
-			var pX = Math.Max(0.0f, Math.Min(w, w * (e.X - Radius) / (bedPicture.Width - 2 * Radius)));
-			var pY = Math.Max(0.0f, Math.Min(h, h * (bedPicture.Height - e.Y - Radius) / (bedPicture.Height - 2 * Radius)));
+			var pX = Math.Max(0.0f, Math.Min(bed.Right, bed.Right * (e.X - Radius) / (bedPicture.Width - 2 * Radius)));
+			var pY = Math.Max(0.0f, Math.Min(bed.Bottom, bed.Bottom * (bedPicture.Height - e.Y - Radius) / (bedPicture.Height - 2 * Radius)));
 			MeasurePoint(pX, pY);
 		}
 
@@ -306,14 +317,12 @@ namespace BedLeveler
 
 			if (port != null)
 			{
-				port.Send($"G1 Z{zMeasureHeight}"); // Avoid gouging surface if we were in the middle of a measurement
+				// Pick the head back up before moving to avoid scratching the bed
+				port.Send($"G1 Z{zMeasureHeight}");
 				port.Send($"G28");
-
-				// Auto bed leveling must occur AFTER G28
 				if (autolevelCheckBox.Checked) port.Send("G29"); 
 
-				var (w, h) = BedDimensions;
-				MeasurePoint(w / 2.0f, h / 2.0f);
+				MeasurePoint(BedCenter);
 			}
 		}
 
@@ -321,7 +330,7 @@ namespace BedLeveler
 		{
 			toMeasure.Clear();
 
-			var (valid, w, h) = CheckedDimensions;
+			var (valid, bed) = CheckedDimensions;
 			if (!valid) return;
 
 			if (!int.TryParse(measureEveryText.Text, out int measureEvery))
@@ -330,8 +339,8 @@ namespace BedLeveler
 				return;
 			}
 
-			for (int i = 0; i <= w; i += measureEvery)
-				for (int j = 0; j <= h; j += measureEvery)
+			for (int i = bed.Left; i <= bed.Right; i += measureEvery)
+				for (int j = bed.Top; j <= bed.Bottom; j += measureEvery)
 					toMeasure.Add(new Vector2(i, j));
 
 			MeasureNextPoint();
@@ -339,11 +348,13 @@ namespace BedLeveler
 
 		private void SendCommand(object sender, EventArgs e)
 		{
-			if (commandBox.Text.Length > 0)
-			{
-				port.Send(commandBox.Text.Trim());
-				commandBox.ResetText();
-			}
+			if (port == null) return;
+
+			string command = commandBox.Text.Trim();
+			if (string.IsNullOrWhiteSpace(command)) return;
+
+			port.Send(command);
+			commandBox.ResetText();
 		}
 
 		private void CommandBox_Enter(object sender, EventArgs e) => ActiveForm.AcceptButton = sendCommandButton;
@@ -363,13 +374,13 @@ namespace BedLeveler
 			// Clearing all measurements interrupts patterns
 			toMeasure.Clear();
 
-			var (valid, w, h) = CheckedDimensions;
+			var (valid, bed) = CheckedDimensions;
 			if (!valid) return;
 
-			MeasurePoint(0, h);
-			MeasurePoint(0, 0);
-			MeasurePoint(w, 0);
-			MeasurePoint(w, h);
+			MeasurePoint(bed.Left, bed.Bottom);
+			MeasurePoint(bed.Left, bed.Top);
+			MeasurePoint(bed.Right, bed.Top);
+			MeasurePoint(bed.Right, bed.Bottom);
 		}
 
 		private void SetZto5(object sender, EventArgs e)
