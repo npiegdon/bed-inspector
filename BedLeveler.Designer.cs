@@ -94,11 +94,10 @@ namespace BedLeveler
          // 
          measureEveryUnits.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
          measureEveryUnits.AutoSize = true;
-         measureEveryUnits.Location = new System.Drawing.Point(293, 888);
-         measureEveryUnits.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+         measureEveryUnits.Location = new System.Drawing.Point(251, 770);
          measureEveryUnits.Name = "measureEveryUnits";
-         measureEveryUnits.Size = new System.Drawing.Size(29, 15);
-         measureEveryUnits.TabIndex = 10;
+         measureEveryUnits.Size = new System.Drawing.Size(23, 13);
+         measureEveryUnits.TabIndex = 12;
          measureEveryUnits.Text = "mm";
          // 
          // tabPrinter
@@ -114,11 +113,10 @@ namespace BedLeveler
          tabPrinter.Controls.Add(topLabel);
          tabPrinter.Controls.Add(this.leftText);
          tabPrinter.Controls.Add(widthLabel);
-         tabPrinter.Location = new System.Drawing.Point(4, 24);
-         tabPrinter.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         tabPrinter.Location = new System.Drawing.Point(4, 22);
          tabPrinter.Name = "tabPrinter";
-         tabPrinter.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-         tabPrinter.Size = new System.Drawing.Size(301, 165);
+         tabPrinter.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+         tabPrinter.Size = new System.Drawing.Size(257, 141);
          tabPrinter.TabIndex = 0;
          tabPrinter.Text = "Printer Settings";
          tabPrinter.UseVisualStyleBackColor = true;
@@ -126,110 +124,99 @@ namespace BedLeveler
          // rightLabel
          // 
          rightLabel.AutoSize = true;
-         rightLabel.Location = new System.Drawing.Point(109, 43);
-         rightLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+         rightLabel.Location = new System.Drawing.Point(93, 37);
          rightLabel.Name = "rightLabel";
-         rightLabel.Size = new System.Drawing.Size(13, 15);
-         rightLabel.TabIndex = 12;
+         rightLabel.Size = new System.Drawing.Size(13, 13);
+         rightLabel.TabIndex = 3;
          rightLabel.Text = "..";
          // 
          // bottomText
          // 
-         this.bottomText.Location = new System.Drawing.Point(130, 70);
-         this.bottomText.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.bottomText.Location = new System.Drawing.Point(111, 61);
          this.bottomText.Name = "bottomText";
-         this.bottomText.Size = new System.Drawing.Size(44, 23);
-         this.bottomText.TabIndex = 11;
+         this.bottomText.Size = new System.Drawing.Size(38, 20);
+         this.bottomText.TabIndex = 8;
          this.bottomText.Text = "150";
          this.bottomText.TextChanged += new System.EventHandler(this.RedrawBedImage);
          // 
          // bottomLabel
          // 
          bottomLabel.AutoSize = true;
-         bottomLabel.Location = new System.Drawing.Point(109, 73);
-         bottomLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+         bottomLabel.Location = new System.Drawing.Point(93, 63);
          bottomLabel.Name = "bottomLabel";
-         bottomLabel.Size = new System.Drawing.Size(13, 15);
-         bottomLabel.TabIndex = 10;
+         bottomLabel.Size = new System.Drawing.Size(13, 13);
+         bottomLabel.TabIndex = 7;
          bottomLabel.Text = "..";
          // 
          // rightText
          // 
-         this.rightText.Location = new System.Drawing.Point(130, 40);
-         this.rightText.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.rightText.Location = new System.Drawing.Point(111, 35);
          this.rightText.Name = "rightText";
-         this.rightText.Size = new System.Drawing.Size(44, 23);
-         this.rightText.TabIndex = 9;
+         this.rightText.Size = new System.Drawing.Size(38, 20);
+         this.rightText.TabIndex = 4;
          this.rightText.Text = "150";
          this.rightText.TextChanged += new System.EventHandler(this.RedrawBedImage);
          // 
          // leftLabel
          // 
          leftLabel.AutoSize = true;
-         leftLabel.Location = new System.Drawing.Point(7, 43);
-         leftLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+         leftLabel.Location = new System.Drawing.Point(6, 37);
          leftLabel.Name = "leftLabel";
-         leftLabel.Size = new System.Drawing.Size(42, 15);
-         leftLabel.TabIndex = 8;
+         leftLabel.Size = new System.Drawing.Size(39, 13);
+         leftLabel.TabIndex = 1;
          leftLabel.Text = "X Axis:";
          // 
          // autolevelCheckBox
          // 
          this.autolevelCheckBox.AutoSize = true;
-         this.autolevelCheckBox.Location = new System.Drawing.Point(80, 111);
-         this.autolevelCheckBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.autolevelCheckBox.Location = new System.Drawing.Point(69, 96);
          this.autolevelCheckBox.Name = "autolevelCheckBox";
          this.autolevelCheckBox.Size = new System.Drawing.Size(15, 14);
-         this.autolevelCheckBox.TabIndex = 7;
+         this.autolevelCheckBox.TabIndex = 10;
          this.autolevelCheckBox.UseVisualStyleBackColor = true;
          // 
          // autolevelLabel
          // 
          this.autolevelLabel.AutoSize = true;
-         this.autolevelLabel.Location = new System.Drawing.Point(7, 110);
-         this.autolevelLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+         this.autolevelLabel.Location = new System.Drawing.Point(6, 95);
          this.autolevelLabel.Name = "autolevelLabel";
-         this.autolevelLabel.Size = new System.Drawing.Size(65, 15);
-         this.autolevelLabel.TabIndex = 6;
+         this.autolevelLabel.Size = new System.Drawing.Size(57, 13);
+         this.autolevelLabel.TabIndex = 9;
          this.autolevelLabel.Text = "Auto-level:";
          // 
          // topText
          // 
-         this.topText.Location = new System.Drawing.Point(57, 71);
-         this.topText.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.topText.Location = new System.Drawing.Point(49, 62);
          this.topText.Name = "topText";
-         this.topText.Size = new System.Drawing.Size(44, 23);
-         this.topText.TabIndex = 4;
+         this.topText.Size = new System.Drawing.Size(38, 20);
+         this.topText.TabIndex = 6;
          this.topText.Text = "0";
          this.topText.TextChanged += new System.EventHandler(this.RedrawBedImage);
          // 
          // topLabel
          // 
          topLabel.AutoSize = true;
-         topLabel.Location = new System.Drawing.Point(7, 73);
-         topLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+         topLabel.Location = new System.Drawing.Point(6, 63);
          topLabel.Name = "topLabel";
-         topLabel.Size = new System.Drawing.Size(42, 15);
-         topLabel.TabIndex = 3;
+         topLabel.Size = new System.Drawing.Size(39, 13);
+         topLabel.TabIndex = 5;
          topLabel.Text = "Y Axis:";
          // 
          // leftText
          // 
-         this.leftText.Location = new System.Drawing.Point(57, 40);
-         this.leftText.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.leftText.Location = new System.Drawing.Point(49, 35);
          this.leftText.Name = "leftText";
-         this.leftText.Size = new System.Drawing.Size(44, 23);
-         this.leftText.TabIndex = 1;
+         this.leftText.Size = new System.Drawing.Size(38, 20);
+         this.leftText.TabIndex = 2;
          this.leftText.Text = "0";
          this.leftText.TextChanged += new System.EventHandler(this.RedrawBedImage);
          // 
          // widthLabel
          // 
          widthLabel.AutoSize = true;
-         widthLabel.Location = new System.Drawing.Point(7, 10);
-         widthLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+         widthLabel.Location = new System.Drawing.Point(6, 9);
          widthLabel.Name = "widthLabel";
-         widthLabel.Size = new System.Drawing.Size(125, 15);
+         widthLabel.Size = new System.Drawing.Size(108, 13);
          widthLabel.TabIndex = 0;
          widthLabel.Text = "Bed Dimensions (mm)";
          // 
@@ -242,11 +229,10 @@ namespace BedLeveler
          tabColors.Controls.Add(minZUnits);
          tabColors.Controls.Add(this.minZText);
          tabColors.Controls.Add(minZLabel);
-         tabColors.Location = new System.Drawing.Point(4, 24);
-         tabColors.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         tabColors.Location = new System.Drawing.Point(4, 22);
          tabColors.Name = "tabColors";
-         tabColors.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-         tabColors.Size = new System.Drawing.Size(301, 165);
+         tabColors.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+         tabColors.Size = new System.Drawing.Size(257, 141);
          tabColors.TabIndex = 1;
          tabColors.Text = "Colors";
          tabColors.UseVisualStyleBackColor = true;
@@ -254,68 +240,61 @@ namespace BedLeveler
          // autoColorLabel
          // 
          autoColorLabel.AutoSize = true;
-         autoColorLabel.Location = new System.Drawing.Point(7, 81);
-         autoColorLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+         autoColorLabel.Location = new System.Drawing.Point(6, 70);
          autoColorLabel.Name = "autoColorLabel";
-         autoColorLabel.Size = new System.Drawing.Size(179, 15);
+         autoColorLabel.Size = new System.Drawing.Size(161, 13);
          autoColorLabel.TabIndex = 6;
          autoColorLabel.Text = "Leave blank for automatic colors";
          // 
          // maxZUnits
          // 
          maxZUnits.AutoSize = true;
-         maxZUnits.Location = new System.Drawing.Point(196, 50);
-         maxZUnits.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+         maxZUnits.Location = new System.Drawing.Point(168, 43);
          maxZUnits.Name = "maxZUnits";
-         maxZUnits.Size = new System.Drawing.Size(29, 15);
+         maxZUnits.Size = new System.Drawing.Size(23, 13);
          maxZUnits.TabIndex = 5;
          maxZUnits.Text = "mm";
          // 
          // maxZText
          // 
-         this.maxZText.Location = new System.Drawing.Point(132, 46);
-         this.maxZText.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.maxZText.Location = new System.Drawing.Point(113, 40);
          this.maxZText.Name = "maxZText";
-         this.maxZText.Size = new System.Drawing.Size(56, 23);
+         this.maxZText.Size = new System.Drawing.Size(49, 20);
          this.maxZText.TabIndex = 4;
          this.maxZText.TextChanged += new System.EventHandler(this.RedrawBedImage);
          // 
          // maxZLabel
          // 
          maxZLabel.AutoSize = true;
-         maxZLabel.Location = new System.Drawing.Point(7, 50);
-         maxZLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+         maxZLabel.Location = new System.Drawing.Point(6, 43);
          maxZLabel.Name = "maxZLabel";
-         maxZLabel.Size = new System.Drawing.Size(105, 15);
+         maxZLabel.Size = new System.Drawing.Size(95, 13);
          maxZLabel.TabIndex = 3;
          maxZLabel.Text = "Force max Z color:";
          // 
          // minZUnits
          // 
          minZUnits.AutoSize = true;
-         minZUnits.Location = new System.Drawing.Point(196, 20);
-         minZUnits.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+         minZUnits.Location = new System.Drawing.Point(168, 17);
          minZUnits.Name = "minZUnits";
-         minZUnits.Size = new System.Drawing.Size(29, 15);
+         minZUnits.Size = new System.Drawing.Size(23, 13);
          minZUnits.TabIndex = 2;
          minZUnits.Text = "mm";
          // 
          // minZText
          // 
-         this.minZText.Location = new System.Drawing.Point(132, 16);
-         this.minZText.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.minZText.Location = new System.Drawing.Point(113, 14);
          this.minZText.Name = "minZText";
-         this.minZText.Size = new System.Drawing.Size(56, 23);
+         this.minZText.Size = new System.Drawing.Size(49, 20);
          this.minZText.TabIndex = 1;
          this.minZText.TextChanged += new System.EventHandler(this.RedrawBedImage);
          // 
          // minZLabel
          // 
          minZLabel.AutoSize = true;
-         minZLabel.Location = new System.Drawing.Point(7, 20);
-         minZLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+         minZLabel.Location = new System.Drawing.Point(6, 17);
          minZLabel.Name = "minZLabel";
-         minZLabel.Size = new System.Drawing.Size(103, 15);
+         minZLabel.Size = new System.Drawing.Size(92, 13);
          minZLabel.TabIndex = 0;
          minZLabel.Text = "Force min Z color:";
          // 
@@ -325,12 +304,11 @@ namespace BedLeveler
          tabs.Controls.Add(tabPrinter);
          tabs.Controls.Add(tabColors);
          tabs.Controls.Add(this.tabDetection);
-         tabs.Location = new System.Drawing.Point(14, 563);
-         tabs.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         tabs.Location = new System.Drawing.Point(12, 488);
          tabs.Name = "tabs";
          tabs.SelectedIndex = 0;
-         tabs.Size = new System.Drawing.Size(309, 193);
-         tabs.TabIndex = 4;
+         tabs.Size = new System.Drawing.Size(265, 167);
+         tabs.TabIndex = 6;
          // 
          // tabDetection
          // 
@@ -338,10 +316,9 @@ namespace BedLeveler
          this.tabDetection.Controls.Add(this.checkMarlin2);
          this.tabDetection.Controls.Add(this.checkMarlin1);
          this.tabDetection.Controls.Add(this.textCustom);
-         this.tabDetection.Location = new System.Drawing.Point(4, 24);
-         this.tabDetection.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.tabDetection.Location = new System.Drawing.Point(4, 22);
          this.tabDetection.Name = "tabDetection";
-         this.tabDetection.Size = new System.Drawing.Size(301, 165);
+         this.tabDetection.Size = new System.Drawing.Size(257, 141);
          this.tabDetection.TabIndex = 2;
          this.tabDetection.Text = "Detection";
          this.tabDetection.UseVisualStyleBackColor = true;
@@ -349,10 +326,9 @@ namespace BedLeveler
          // checkCustom
          // 
          this.checkCustom.AutoSize = true;
-         this.checkCustom.Location = new System.Drawing.Point(7, 73);
-         this.checkCustom.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.checkCustom.Location = new System.Drawing.Point(6, 63);
          this.checkCustom.Name = "checkCustom";
-         this.checkCustom.Size = new System.Drawing.Size(68, 19);
+         this.checkCustom.Size = new System.Drawing.Size(61, 17);
          this.checkCustom.TabIndex = 2;
          this.checkCustom.Text = "Custom";
          this.checkCustom.UseVisualStyleBackColor = true;
@@ -363,10 +339,9 @@ namespace BedLeveler
          this.checkMarlin2.AutoSize = true;
          this.checkMarlin2.Checked = true;
          this.checkMarlin2.CheckState = System.Windows.Forms.CheckState.Checked;
-         this.checkMarlin2.Location = new System.Drawing.Point(7, 46);
-         this.checkMarlin2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.checkMarlin2.Location = new System.Drawing.Point(6, 40);
          this.checkMarlin2.Name = "checkMarlin2";
-         this.checkMarlin2.Size = new System.Drawing.Size(78, 19);
+         this.checkMarlin2.Size = new System.Drawing.Size(71, 17);
          this.checkMarlin2.TabIndex = 1;
          this.checkMarlin2.Text = "Marlin 2.x";
          this.checkMarlin2.UseVisualStyleBackColor = true;
@@ -377,10 +352,9 @@ namespace BedLeveler
          this.checkMarlin1.AutoSize = true;
          this.checkMarlin1.Checked = true;
          this.checkMarlin1.CheckState = System.Windows.Forms.CheckState.Checked;
-         this.checkMarlin1.Location = new System.Drawing.Point(7, 20);
-         this.checkMarlin1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.checkMarlin1.Location = new System.Drawing.Point(6, 17);
          this.checkMarlin1.Name = "checkMarlin1";
-         this.checkMarlin1.Size = new System.Drawing.Size(78, 19);
+         this.checkMarlin1.Size = new System.Drawing.Size(71, 17);
          this.checkMarlin1.TabIndex = 0;
          this.checkMarlin1.Text = "Marlin 1.x";
          this.checkMarlin1.UseVisualStyleBackColor = true;
@@ -390,14 +364,13 @@ namespace BedLeveler
          // 
          this.textCustom.DetectUrls = false;
          this.textCustom.Enabled = false;
-         this.textCustom.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-         this.textCustom.Location = new System.Drawing.Point(27, 99);
-         this.textCustom.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.textCustom.Font = new System.Drawing.Font("Courier New", 9.75F);
+         this.textCustom.Location = new System.Drawing.Point(23, 86);
          this.textCustom.Multiline = false;
          this.textCustom.Name = "textCustom";
          this.textCustom.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
          this.textCustom.ShortcutsEnabled = false;
-         this.textCustom.Size = new System.Drawing.Size(256, 25);
+         this.textCustom.Size = new System.Drawing.Size(220, 22);
          this.textCustom.TabIndex = 3;
          this.textCustom.Text = "Bed X: {X} Y: {Y} Z: {Z}";
          this.textCustom.WordWrap = false;
@@ -405,18 +378,16 @@ namespace BedLeveler
          // 
          // portText
          // 
-         this.portText.Location = new System.Drawing.Point(14, 16);
-         this.portText.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.portText.Location = new System.Drawing.Point(12, 14);
          this.portText.Name = "portText";
-         this.portText.Size = new System.Drawing.Size(116, 23);
+         this.portText.Size = new System.Drawing.Size(100, 20);
          this.portText.TabIndex = 0;
          // 
          // connectButton
          // 
-         this.connectButton.Location = new System.Drawing.Point(138, 14);
-         this.connectButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.connectButton.Location = new System.Drawing.Point(118, 12);
          this.connectButton.Name = "connectButton";
-         this.connectButton.Size = new System.Drawing.Size(88, 27);
+         this.connectButton.Size = new System.Drawing.Size(75, 23);
          this.connectButton.TabIndex = 1;
          this.connectButton.Text = "&Connect";
          this.connectButton.UseVisualStyleBackColor = true;
@@ -426,22 +397,20 @@ namespace BedLeveler
          // 
          this.outputText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-         this.outputText.Location = new System.Drawing.Point(14, 47);
-         this.outputText.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.outputText.Location = new System.Drawing.Point(12, 41);
          this.outputText.Multiline = true;
          this.outputText.Name = "outputText";
          this.outputText.ReadOnly = true;
          this.outputText.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-         this.outputText.Size = new System.Drawing.Size(305, 479);
+         this.outputText.Size = new System.Drawing.Size(262, 416);
          this.outputText.TabIndex = 3;
          // 
          // disconnectButton
          // 
          this.disconnectButton.Enabled = false;
-         this.disconnectButton.Location = new System.Drawing.Point(232, 14);
-         this.disconnectButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.disconnectButton.Location = new System.Drawing.Point(199, 12);
          this.disconnectButton.Name = "disconnectButton";
-         this.disconnectButton.Size = new System.Drawing.Size(88, 27);
+         this.disconnectButton.Size = new System.Drawing.Size(75, 23);
          this.disconnectButton.TabIndex = 2;
          this.disconnectButton.Text = "&Disconnect";
          this.disconnectButton.UseVisualStyleBackColor = true;
@@ -452,10 +421,9 @@ namespace BedLeveler
          this.bedPicture.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-         this.bedPicture.Location = new System.Drawing.Point(331, 0);
-         this.bedPicture.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.bedPicture.Location = new System.Drawing.Point(284, 0);
          this.bedPicture.Name = "bedPicture";
-         this.bedPicture.Size = new System.Drawing.Size(933, 923);
+         this.bedPicture.Size = new System.Drawing.Size(800, 800);
          this.bedPicture.TabIndex = 5;
          this.bedPicture.TabStop = false;
          this.bedPicture.Paint += new System.Windows.Forms.PaintEventHandler(this.BedPaint);
@@ -465,21 +433,19 @@ namespace BedLeveler
          // measureEveryText
          // 
          this.measureEveryText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-         this.measureEveryText.Location = new System.Drawing.Point(229, 885);
-         this.measureEveryText.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.measureEveryText.Location = new System.Drawing.Point(196, 767);
          this.measureEveryText.Name = "measureEveryText";
-         this.measureEveryText.Size = new System.Drawing.Size(56, 23);
-         this.measureEveryText.TabIndex = 9;
+         this.measureEveryText.Size = new System.Drawing.Size(49, 20);
+         this.measureEveryText.TabIndex = 11;
          this.measureEveryText.Text = "10";
          // 
          // measureEveryButton
          // 
          this.measureEveryButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-         this.measureEveryButton.Location = new System.Drawing.Point(14, 883);
-         this.measureEveryButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.measureEveryButton.Location = new System.Drawing.Point(12, 765);
          this.measureEveryButton.Name = "measureEveryButton";
-         this.measureEveryButton.Size = new System.Drawing.Size(208, 27);
-         this.measureEveryButton.TabIndex = 8;
+         this.measureEveryButton.Size = new System.Drawing.Size(178, 23);
+         this.measureEveryButton.TabIndex = 10;
          this.measureEveryButton.Text = "Measure every:";
          this.measureEveryButton.UseVisualStyleBackColor = true;
          this.measureEveryButton.Click += new System.EventHandler(this.GeneratePattern);
@@ -487,11 +453,10 @@ namespace BedLeveler
          // setZ5Button
          // 
          this.setZ5Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-         this.setZ5Button.Location = new System.Drawing.Point(14, 795);
-         this.setZ5Button.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.setZ5Button.Location = new System.Drawing.Point(12, 689);
          this.setZ5Button.Name = "setZ5Button";
-         this.setZ5Button.Size = new System.Drawing.Size(306, 27);
-         this.setZ5Button.TabIndex = 6;
+         this.setZ5Button.Size = new System.Drawing.Size(262, 23);
+         this.setZ5Button.TabIndex = 8;
          this.setZ5Button.Text = "Move Z to 5.0mm";
          this.setZ5Button.UseVisualStyleBackColor = true;
          this.setZ5Button.Click += new System.EventHandler(this.SetZto5);
@@ -499,11 +464,10 @@ namespace BedLeveler
          // measureCornersButton
          // 
          this.measureCornersButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-         this.measureCornersButton.Location = new System.Drawing.Point(14, 849);
-         this.measureCornersButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.measureCornersButton.Location = new System.Drawing.Point(12, 736);
          this.measureCornersButton.Name = "measureCornersButton";
-         this.measureCornersButton.Size = new System.Drawing.Size(306, 27);
-         this.measureCornersButton.TabIndex = 7;
+         this.measureCornersButton.Size = new System.Drawing.Size(262, 23);
+         this.measureCornersButton.TabIndex = 9;
          this.measureCornersButton.Text = "Measure corners";
          this.measureCornersButton.UseVisualStyleBackColor = true;
          this.measureCornersButton.Click += new System.EventHandler(this.MeasureCorners);
@@ -511,42 +475,41 @@ namespace BedLeveler
          // recenterButton
          // 
          this.recenterButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-         this.recenterButton.Location = new System.Drawing.Point(14, 762);
-         this.recenterButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.recenterButton.Location = new System.Drawing.Point(12, 660);
          this.recenterButton.Name = "recenterButton";
-         this.recenterButton.Size = new System.Drawing.Size(306, 27);
-         this.recenterButton.TabIndex = 5;
+         this.recenterButton.Size = new System.Drawing.Size(262, 23);
+         this.recenterButton.TabIndex = 7;
          this.recenterButton.Text = "Clear and return to center";
          this.recenterButton.UseVisualStyleBackColor = true;
          this.recenterButton.Click += new System.EventHandler(this.ClearClicked);
          // 
          // commandBox
          // 
-         this.commandBox.Location = new System.Drawing.Point(14, 535);
-         this.commandBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.commandBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+         this.commandBox.Location = new System.Drawing.Point(12, 464);
          this.commandBox.Name = "commandBox";
-         this.commandBox.Size = new System.Drawing.Size(244, 23);
-         this.commandBox.TabIndex = 11;
+         this.commandBox.Size = new System.Drawing.Size(210, 20);
+         this.commandBox.TabIndex = 4;
          this.commandBox.Enter += new System.EventHandler(this.CommandBox_Enter);
          this.commandBox.Leave += new System.EventHandler(this.CommandBox_Leave);
          // 
          // sendCommandButton
          // 
+         this.sendCommandButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
          this.sendCommandButton.Enabled = false;
-         this.sendCommandButton.Location = new System.Drawing.Point(265, 532);
-         this.sendCommandButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+         this.sendCommandButton.Location = new System.Drawing.Point(227, 461);
          this.sendCommandButton.Name = "sendCommandButton";
-         this.sendCommandButton.Size = new System.Drawing.Size(54, 27);
-         this.sendCommandButton.TabIndex = 12;
+         this.sendCommandButton.Size = new System.Drawing.Size(46, 23);
+         this.sendCommandButton.TabIndex = 5;
          this.sendCommandButton.Text = "Send";
          this.sendCommandButton.UseVisualStyleBackColor = true;
          this.sendCommandButton.Click += new System.EventHandler(this.SendCommand);
          // 
          // BedLeveler
          // 
-         this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+         this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(1265, 923);
+         this.ClientSize = new System.Drawing.Size(1084, 800);
          this.Controls.Add(this.sendCommandButton);
          this.Controls.Add(this.commandBox);
          this.Controls.Add(tabs);
@@ -562,8 +525,7 @@ namespace BedLeveler
          this.Controls.Add(this.connectButton);
          this.Controls.Add(this.portText);
          this.DoubleBuffered = true;
-         this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-         this.MinimumSize = new System.Drawing.Size(861, 559);
+         this.MinimumSize = new System.Drawing.Size(740, 490);
          this.Name = "BedLeveler";
          this.Text = "Printer Bed Inspector";
          this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BedLeveler_FormClosing);
