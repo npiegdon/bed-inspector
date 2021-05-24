@@ -13,6 +13,8 @@ namespace BedLeveler
 	public partial class BedLeveler : Form
 	{
 		PrinterPort port;
+		PrinterPortSettings settings = new();
+
 		readonly List<Vector3> points = new();
 		readonly List<Vector2> toMeasure = new();
 
@@ -38,7 +40,7 @@ namespace BedLeveler
 
 		Rectangle BedDimensions
 		{
-			get => new(int.TryParse(leftText.Text, out int left) ? left : 0,  int.TryParse(topText.Text, out int top) ? top : 0,
+			get => new(int.TryParse(leftText.Text, out int left) ? left : 0, int.TryParse(topText.Text, out int top) ? top : 0,
 				int.TryParse(rightText.Text, out int right) ? right : 0, int.TryParse(bottomText.Text, out int bottom) ? bottom : 0);
 		}
 
@@ -192,8 +194,9 @@ namespace BedLeveler
 
 		private void ConnectButton_Click(object sender, EventArgs e)
 		{
-			if (port == null) port = new PrinterPort(portText.Text, DataReceived);
+			if (port == null) port = new PrinterPort(portText.Text, settings, DataReceived);
 			connectButton.Enabled = false;
+			settingsButton.Enabled = false;
 			disconnectButton.Enabled = true;
 			sendCommandButton.Enabled = true;
 
@@ -211,6 +214,7 @@ namespace BedLeveler
 			port = null;
 
 			connectButton.Enabled = true;
+			settingsButton.Enabled = true;
 			disconnectButton.Enabled = false;
 			sendCommandButton.Enabled = false;
 		}
@@ -402,6 +406,12 @@ namespace BedLeveler
 		{
 			textCustom.Enabled = checkCustom.Checked;
 			bedPicture.Invalidate();
+		}
+
+		private void SettingsClick(object sender, EventArgs e)
+		{
+			var dialog = new Config { Box = settings.ToString() };
+			if (dialog.ShowDialog(this) == DialogResult.OK) settings = new PrinterPortSettings(dialog.Box);
 		}
 	}
 }

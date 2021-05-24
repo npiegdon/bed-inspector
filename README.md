@@ -9,8 +9,10 @@ While troubleshooting prints that always peeled up in a particular spot, I spot-
 ## Instructions
 
 1. Adjust the left/right and top/bottom boundaries in the box to match the dimensions of your printer.  Giving all four dimensions (instead of just width/height) allows you to add a bit of margin in case the sensor's offset makes it go past the edge of the bed.
-1. Type in your printer's serial port address at the top left and click Connect. (If it's the only serial device connected, the address should be auto-detected.)
+1. Type in your printer's serial port address at the top left.  If it's the only serial device connected, the address should be automatically detected.
+1. Click Connect.
 1. Your printer should automatically home, center, and measure the height. (G28 and G30)
+1. (If it doesn't, try disconnecting and clicking the "..." button next to the port name box.  Here you can adjust advanced serial port connection settings.  You may be able to find the "correct" values from other software that has successfully connected to your printer in the past.  Check the **Fields** section in these links for the legal values possible for [parity](https://docs.microsoft.com/en-us/dotnet/api/system.io.ports.parity?view=netframework-4.7.2), [stop](https://docs.microsoft.com/en-us/dotnet/api/system.io.ports.stopbits?view=netframework-4.7.2), and [handshake](https://docs.microsoft.com/en-us/dotnet/api/system.io.ports.handshake?view=netframework-4.7.2).) 
 1. Click around in the field to measure that location. (G1 followed by G30)
 1. To measure many points automatically, click the "Measure every" button at the bottom-left.  (Change the number in the box first if you'd like to adjust the spacing.)
 

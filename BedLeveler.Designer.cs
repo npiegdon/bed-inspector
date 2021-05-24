@@ -69,6 +69,7 @@ namespace BedLeveler
          this.recenterButton = new System.Windows.Forms.Button();
          this.commandBox = new System.Windows.Forms.TextBox();
          this.sendCommandButton = new System.Windows.Forms.Button();
+         this.settingsButton = new System.Windows.Forms.Button();
          measureEveryUnits = new System.Windows.Forms.Label();
          tabPrinter = new System.Windows.Forms.TabPage();
          rightLabel = new System.Windows.Forms.Label();
@@ -97,7 +98,7 @@ namespace BedLeveler
          measureEveryUnits.Location = new System.Drawing.Point(251, 770);
          measureEveryUnits.Name = "measureEveryUnits";
          measureEveryUnits.Size = new System.Drawing.Size(23, 13);
-         measureEveryUnits.TabIndex = 12;
+         measureEveryUnits.TabIndex = 13;
          measureEveryUnits.Text = "mm";
          // 
          // tabPrinter
@@ -115,7 +116,7 @@ namespace BedLeveler
          tabPrinter.Controls.Add(widthLabel);
          tabPrinter.Location = new System.Drawing.Point(4, 22);
          tabPrinter.Name = "tabPrinter";
-         tabPrinter.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+         tabPrinter.Padding = new System.Windows.Forms.Padding(3);
          tabPrinter.Size = new System.Drawing.Size(257, 141);
          tabPrinter.TabIndex = 0;
          tabPrinter.Text = "Printer Settings";
@@ -231,7 +232,7 @@ namespace BedLeveler
          tabColors.Controls.Add(minZLabel);
          tabColors.Location = new System.Drawing.Point(4, 22);
          tabColors.Name = "tabColors";
-         tabColors.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+         tabColors.Padding = new System.Windows.Forms.Padding(3);
          tabColors.Size = new System.Drawing.Size(257, 141);
          tabColors.TabIndex = 1;
          tabColors.Text = "Colors";
@@ -308,7 +309,7 @@ namespace BedLeveler
          tabs.Name = "tabs";
          tabs.SelectedIndex = 0;
          tabs.Size = new System.Drawing.Size(265, 167);
-         tabs.TabIndex = 6;
+         tabs.TabIndex = 7;
          // 
          // tabDetection
          // 
@@ -380,7 +381,7 @@ namespace BedLeveler
          // 
          this.portText.Location = new System.Drawing.Point(12, 14);
          this.portText.Name = "portText";
-         this.portText.Size = new System.Drawing.Size(100, 20);
+         this.portText.Size = new System.Drawing.Size(67, 20);
          this.portText.TabIndex = 0;
          // 
          // connectButton
@@ -388,7 +389,7 @@ namespace BedLeveler
          this.connectButton.Location = new System.Drawing.Point(118, 12);
          this.connectButton.Name = "connectButton";
          this.connectButton.Size = new System.Drawing.Size(75, 23);
-         this.connectButton.TabIndex = 1;
+         this.connectButton.TabIndex = 2;
          this.connectButton.Text = "&Connect";
          this.connectButton.UseVisualStyleBackColor = true;
          this.connectButton.Click += new System.EventHandler(this.ConnectButton_Click);
@@ -403,7 +404,7 @@ namespace BedLeveler
          this.outputText.ReadOnly = true;
          this.outputText.ScrollBars = System.Windows.Forms.ScrollBars.Both;
          this.outputText.Size = new System.Drawing.Size(262, 416);
-         this.outputText.TabIndex = 3;
+         this.outputText.TabIndex = 4;
          // 
          // disconnectButton
          // 
@@ -411,7 +412,7 @@ namespace BedLeveler
          this.disconnectButton.Location = new System.Drawing.Point(199, 12);
          this.disconnectButton.Name = "disconnectButton";
          this.disconnectButton.Size = new System.Drawing.Size(75, 23);
-         this.disconnectButton.TabIndex = 2;
+         this.disconnectButton.TabIndex = 3;
          this.disconnectButton.Text = "&Disconnect";
          this.disconnectButton.UseVisualStyleBackColor = true;
          this.disconnectButton.Click += new System.EventHandler(this.DisconnectButton_Click);
@@ -436,7 +437,7 @@ namespace BedLeveler
          this.measureEveryText.Location = new System.Drawing.Point(196, 767);
          this.measureEveryText.Name = "measureEveryText";
          this.measureEveryText.Size = new System.Drawing.Size(49, 20);
-         this.measureEveryText.TabIndex = 11;
+         this.measureEveryText.TabIndex = 12;
          this.measureEveryText.Text = "10";
          // 
          // measureEveryButton
@@ -445,7 +446,7 @@ namespace BedLeveler
          this.measureEveryButton.Location = new System.Drawing.Point(12, 765);
          this.measureEveryButton.Name = "measureEveryButton";
          this.measureEveryButton.Size = new System.Drawing.Size(178, 23);
-         this.measureEveryButton.TabIndex = 10;
+         this.measureEveryButton.TabIndex = 11;
          this.measureEveryButton.Text = "Measure every:";
          this.measureEveryButton.UseVisualStyleBackColor = true;
          this.measureEveryButton.Click += new System.EventHandler(this.GeneratePattern);
@@ -456,7 +457,7 @@ namespace BedLeveler
          this.setZ5Button.Location = new System.Drawing.Point(12, 689);
          this.setZ5Button.Name = "setZ5Button";
          this.setZ5Button.Size = new System.Drawing.Size(262, 23);
-         this.setZ5Button.TabIndex = 8;
+         this.setZ5Button.TabIndex = 9;
          this.setZ5Button.Text = "Move Z to 5.0mm";
          this.setZ5Button.UseVisualStyleBackColor = true;
          this.setZ5Button.Click += new System.EventHandler(this.SetZto5);
@@ -467,7 +468,7 @@ namespace BedLeveler
          this.measureCornersButton.Location = new System.Drawing.Point(12, 736);
          this.measureCornersButton.Name = "measureCornersButton";
          this.measureCornersButton.Size = new System.Drawing.Size(262, 23);
-         this.measureCornersButton.TabIndex = 9;
+         this.measureCornersButton.TabIndex = 10;
          this.measureCornersButton.Text = "Measure corners";
          this.measureCornersButton.UseVisualStyleBackColor = true;
          this.measureCornersButton.Click += new System.EventHandler(this.MeasureCorners);
@@ -478,7 +479,7 @@ namespace BedLeveler
          this.recenterButton.Location = new System.Drawing.Point(12, 660);
          this.recenterButton.Name = "recenterButton";
          this.recenterButton.Size = new System.Drawing.Size(262, 23);
-         this.recenterButton.TabIndex = 7;
+         this.recenterButton.TabIndex = 8;
          this.recenterButton.Text = "Clear and return to center";
          this.recenterButton.UseVisualStyleBackColor = true;
          this.recenterButton.Click += new System.EventHandler(this.ClearClicked);
@@ -489,7 +490,7 @@ namespace BedLeveler
          this.commandBox.Location = new System.Drawing.Point(12, 464);
          this.commandBox.Name = "commandBox";
          this.commandBox.Size = new System.Drawing.Size(210, 20);
-         this.commandBox.TabIndex = 4;
+         this.commandBox.TabIndex = 5;
          this.commandBox.Enter += new System.EventHandler(this.CommandBox_Enter);
          this.commandBox.Leave += new System.EventHandler(this.CommandBox_Leave);
          // 
@@ -500,16 +501,27 @@ namespace BedLeveler
          this.sendCommandButton.Location = new System.Drawing.Point(227, 461);
          this.sendCommandButton.Name = "sendCommandButton";
          this.sendCommandButton.Size = new System.Drawing.Size(46, 23);
-         this.sendCommandButton.TabIndex = 5;
+         this.sendCommandButton.TabIndex = 6;
          this.sendCommandButton.Text = "Send";
          this.sendCommandButton.UseVisualStyleBackColor = true;
          this.sendCommandButton.Click += new System.EventHandler(this.SendCommand);
+         // 
+         // settingsButton
+         // 
+         this.settingsButton.Location = new System.Drawing.Point(85, 12);
+         this.settingsButton.Name = "settingsButton";
+         this.settingsButton.Size = new System.Drawing.Size(27, 23);
+         this.settingsButton.TabIndex = 1;
+         this.settingsButton.Text = "...";
+         this.settingsButton.UseVisualStyleBackColor = true;
+         this.settingsButton.Click += new System.EventHandler(this.SettingsClick);
          // 
          // BedLeveler
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
          this.ClientSize = new System.Drawing.Size(1084, 800);
+         this.Controls.Add(this.settingsButton);
          this.Controls.Add(this.sendCommandButton);
          this.Controls.Add(this.commandBox);
          this.Controls.Add(tabs);
@@ -569,5 +581,6 @@ namespace BedLeveler
 		private System.Windows.Forms.TextBox rightText;
 		private System.Windows.Forms.TextBox topText;
 		private System.Windows.Forms.TextBox leftText;
+		private System.Windows.Forms.Button settingsButton;
 	}
 }

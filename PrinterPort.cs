@@ -9,14 +9,10 @@ namespace BedLeveler
 	class LineSplitter
 	{
 		byte[] current;
-		public readonly byte Delimiter;
-
+		readonly byte Delimiter;
 		public event Action<byte[]> LineReceived;
 
-		public LineSplitter(byte delimiter)
-		{
-			Delimiter = delimiter;
-		}
+		public LineSplitter(byte delimiter) => Delimiter = delimiter;
 
 		public void AddData(byte[] buffer)
 		{
@@ -56,6 +52,54 @@ namespace BedLeveler
 		}
 	}
 
+	public class PrinterPortSettings
+	{
+		public int baud = 115200;
+		public Parity parity = Parity.None;
+		public int data = 8;
+		public StopBits stop = StopBits.One;
+		public Handshake handshake = Handshake.None;
+		public bool dtr = true;
+		public bool rts = true;
+
+		public PrinterPortSettings() { }
+
+		public PrinterPortSettings(string settings)
+		{
+			if (string.IsNullOrWhiteSpace(settings)) return;
+
+			var lines = settings.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+			foreach (var line in lines)
+			{
+				var tokens = line.Trim().ToLowerInvariant().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+				if (tokens.Length != 2) continue;
+
+				string v = tokens[1].Trim();
+				switch (tokens[0])
+				{
+					case "baud": baud = (int.TryParse(v, out int b) && b > 0) ? b : baud; break;
+					case "parity": parity = Enum.TryParse(v, true, out Parity p) ? p : parity; break;
+					case "data": data = (int.TryParse(v, out int d) && d > 0) ? d : data; break;
+					case "stop": stop = Enum.TryParse(v, true, out StopBits s) ? s : stop; break;
+					case "handshake": handshake = Enum.TryParse(v, true, out Handshake h) ? h : handshake; break;
+					case "dtr": dtr = bool.TryParse(v, out bool dt) ? dt : dtr; break;
+					case "rts": rts = bool.TryParse(v, out bool rt) ? rt : rts; break;
+				}
+			}
+		}
+
+		public override string ToString()
+		{
+			return $@"baud {baud}
+parity {Enum.GetName(typeof(Parity), parity).ToLowerInvariant()}
+data {data}
+stop {Enum.GetName(typeof(StopBits), stop).ToLowerInvariant()}
+handshake {Enum.GetName(typeof(Handshake), handshake).ToLowerInvariant()}
+dtr {dtr.ToString().ToLowerInvariant()}
+rts {rts.ToString().ToLowerInvariant()}";
+		}
+	}
+
 	class PrinterPort : IDisposable
 	{
 		readonly SerialPort Port;
@@ -65,16 +109,16 @@ namespace BedLeveler
 
 		volatile bool Running = true;
 
-		public PrinterPort(string portName, Action<string> callback)
+		public PrinterPort(string portName, PrinterPortSettings settings, Action<string> callback)
 		{
 			Callback = callback ?? throw new ArgumentOutOfRangeException(nameof(callback), "Bad callback");
 
 			if (string.IsNullOrWhiteSpace(portName)) throw new ArgumentOutOfRangeException(nameof(portName), "Bad port");
-			Port = new SerialPort(portName, 115200, Parity.None, 8, StopBits.One)
+			Port = new SerialPort(portName, settings.baud, settings.parity, settings.data, settings.stop)
 			{
-				Handshake = Handshake.None,
-				DtrEnable = true,
-				RtsEnable = true,
+				Handshake = settings.handshake,
+				DtrEnable = settings.dtr,
+				RtsEnable = settings.rts,
 			};
 
 			Port.Open();
@@ -110,8 +154,8 @@ namespace BedLeveler
 
 				try
 				{
-					int read = await Port.BaseStream.ReadAsync(buffer.AsMemory(0, buffer.Length));
-					if (read == 0) continue;
+					int read = await Port.BaseStream.ReadAsync(buffer, 0, buffer.Length);
+					if (read == 0) { Thread.Sleep(10); continue; }
 
 					byte[] handoff = new byte[read];
 					Buffer.BlockCopy(buffer, 0, handoff, 0, read);
