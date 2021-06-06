@@ -7,13 +7,15 @@ using System.Drawing.Drawing2D;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using Microsoft.Win32;
 
 namespace BedLeveler
 {
 	public partial class BedLeveler : Form
 	{
 		PrinterPort port;
-		PrinterPortSettings settings = new();
+		PrinterPortSettings portSettings = new();
+		bool goodConnection = false;
 
 		readonly List<Vector3> points = new();
 		readonly List<Vector2> toMeasure = new();
@@ -25,6 +27,14 @@ namespace BedLeveler
 		const int zMeasureHeight = 3;
 		const int feedSpeed = 6000;
 
+		const string AppKey = @"SOFTWARE\Bed Inspector";
+		const string PortKey = "Port";
+		const string SettingsKey = "Settings";
+
+		const int FlagMarlin1 = 1 << 1;
+		const int FlagMarlin2 = 1 << 2;
+		const int FlagCustom = 1 << 7;
+
 		public BedLeveler()
 		{
 			InitializeComponent();
@@ -32,16 +42,87 @@ namespace BedLeveler
 			var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
 			Text += $" {version.Major}.{version.Minor}";
 
-			UpdateCustomDetection(textCustom);
-
 			// Give our best guess at a port name
 			portText.Text = System.IO.Ports.SerialPort.GetPortNames().FirstOrDefault() ?? "COM5";
+
+			using RegistryKey registry = Registry.CurrentUser.CreateSubKey(AppKey);
+			portSettings = new PrinterPortSettings(string.Join("\r\n", registry.GetValue(PortKey, new string[] { }) as string[]));
+			Settings = registry.GetValue(SettingsKey, new string[] { }) as string[];
+
+			UpdateCustomDetection(textCustom);
+		}
+
+		string[] Settings
+		{
+			get => new string[]
+			{
+				$"port {(goodConnection ? portText.Text : string.Empty)}",
+				$"dimensions {BedDimensions.Left} {BedDimensions.Right} {BedDimensions.Top} {BedDimensions.Bottom}",
+				$"level {autolevelCheckBox.Checked}",
+				$"color {ColorBounds.Item1 ?? -999f} { ColorBounds.Item2 ?? -999f}",
+				$"detection {(checkMarlin1.Checked ? FlagMarlin1 : 0) + (checkMarlin2.Checked ? FlagMarlin2 : 0) + (checkCustom.Checked ? FlagCustom : 0)}",
+				$"custom {textCustom.Text.Trim()}",
+				$"spacing {measureEveryText.Text}",
+			};
+
+			set
+			{
+				foreach (string s in value)
+				{
+					if (string.IsNullOrWhiteSpace(s)) continue;
+
+					var split = s.IndexOf(' ');
+					if (split < 3) continue;
+
+					string name = s.Substring(0, split).ToLowerInvariant();
+					string val = s.Substring(split + 1);
+					if (string.IsNullOrWhiteSpace(val)) continue;
+
+					string[] tokens;
+					switch (name)
+					{
+						case "port": portText.Text = val; break;
+						case "custom": textCustom.Text = val; break;
+						case "spacing": measureEveryText.Text = val; break;
+						case "level": if (bool.TryParse(val, out bool level)) autolevelCheckBox.Checked = level; break;
+
+						case "dimensions":
+							tokens = val.Split(' ');
+							if (tokens.Length != 4) continue;
+							if (int.TryParse(tokens[0], out int L)) leftText.Text = L.ToString();
+							if (int.TryParse(tokens[1], out int R)) rightText.Text = R.ToString();
+							if (int.TryParse(tokens[2], out int T)) topText.Text = T.ToString();
+							if (int.TryParse(tokens[3], out int B)) bottomText.Text = B.ToString();
+							break;
+
+						case "color":
+							tokens = val.Split(' ');
+							if (tokens.Length != 2) continue;
+							if (float.TryParse(tokens[0], out float min)) minZText.Text = min <= -999f ? string.Empty : min.ToString();
+							if (float.TryParse(tokens[1], out float max)) maxZText.Text = max <= -999f ? string.Empty : max.ToString();
+							break;
+
+						case "detection":
+							if (!int.TryParse(val, out int flags)) continue;
+							checkMarlin1.Checked = (flags & FlagMarlin1) != 0;
+							checkMarlin2.Checked = (flags & FlagMarlin2) != 0;
+							checkCustom.Checked = (flags & FlagCustom) != 0;
+							break;
+					}
+				}
+			}
 		}
 
 		Rectangle BedDimensions
 		{
-			get => new(int.TryParse(leftText.Text, out int left) ? left : 0, int.TryParse(topText.Text, out int top) ? top : 0,
-				int.TryParse(rightText.Text, out int right) ? right : 0, int.TryParse(bottomText.Text, out int bottom) ? bottom : 0);
+			get
+			{
+				var t = int.TryParse(topText.Text, out int top) ? top : 0;
+				var l = int.TryParse(leftText.Text, out int left) ? left : 0;
+				var r = int.TryParse(rightText.Text, out int right) ? right : 0;
+				var b = int.TryParse(bottomText.Text, out int bottom) ? bottom : 0;
+				return new(l, t, r - l, b - t);
+			}
 		}
 
 		(bool, Rectangle) CheckedDimensions
@@ -186,6 +267,7 @@ namespace BedLeveler
 				if (!p.HasValue && checkCustom.Checked) p = Check(customDetection);
 				if (!p.HasValue) return;
 
+				goodConnection = true;
 				points.Add(p.Value);
 				MeasureNextPoint();
 				bedPicture.Invalidate();
@@ -194,7 +276,7 @@ namespace BedLeveler
 
 		private void ConnectButton_Click(object sender, EventArgs e)
 		{
-			if (port == null) port = new PrinterPort(portText.Text, settings, DataReceived);
+			if (port == null) port = new PrinterPort(portText.Text, portSettings, DataReceived);
 			connectButton.Enabled = false;
 			settingsButton.Enabled = false;
 			disconnectButton.Enabled = true;
@@ -366,6 +448,9 @@ namespace BedLeveler
 
 		private void BedLeveler_FormClosing(object sender, FormClosingEventArgs e)
 		{
+			using (RegistryKey registry = Registry.CurrentUser.CreateSubKey(AppKey))
+				registry.SetValue(SettingsKey, Settings);
+
 			if (port != null)
 			{
 				port.Dispose();
@@ -410,8 +495,13 @@ namespace BedLeveler
 
 		private void SettingsClick(object sender, EventArgs e)
 		{
-			var dialog = new Config { Box = settings.ToString() };
-			if (dialog.ShowDialog(this) == DialogResult.OK) settings = new PrinterPortSettings(dialog.Box);
+			var dialog = new Config { Box = portSettings.ToString() };
+			if (dialog.ShowDialog(this) != DialogResult.OK) return;
+			
+			portSettings = new PrinterPortSettings(dialog.Box);
+
+			using RegistryKey registry = Registry.CurrentUser.CreateSubKey(AppKey);
+			registry.SetValue(PortKey, portSettings.ToString().Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None));
 		}
 	}
 }
